@@ -2,7 +2,8 @@ package at.pcgamingfreaks.service.thirdparty.data.trakt;
 
 import at.pcgamingfreaks.config.ThirdPartyConfig;
 import at.pcgamingfreaks.mapper.ListEntryDtoMapper;
-import at.pcgamingfreaks.model.ThirdPartyService;
+import at.pcgamingfreaks.model.db.MediaTypeSettings;
+import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.dto.ListEntryDTO;
 import at.pcgamingfreaks.model.exceptions.EntryNotFoundException;
@@ -42,8 +43,8 @@ public abstract class TraktDataService implements DataService {
 	protected final ListEntryDtoMapper listEntryDtoMapper;
 
 	@Override
-	public ThirdPartyService getService() {
-		return ThirdPartyService.TRAKT;
+	public MediaSource getService() {
+		return MediaSource.TRAKT;
 	}
 
 	@Override
@@ -137,7 +138,8 @@ public abstract class TraktDataService implements DataService {
 		entryScore.setScore((int) score);
 		entryScoreRepository.save(entryScore);
 
-		if (user.getConnections().get(getService()).isAutoUpdateSync()) pushSingleChange(id, score, user);
+		MediaTypeSettings settings = user.getConnections().get(getService()).getMediaTypeSettings().get(getContentType());
+		if (settings != null && settings.isAutoPush()) pushSingleChange(id, score, user);
 	}
 
 	abstract protected void pushSingleChange(long id, float score, User user);

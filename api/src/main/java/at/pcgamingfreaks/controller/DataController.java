@@ -1,7 +1,7 @@
 package at.pcgamingfreaks.controller;
 
-import at.pcgamingfreaks.model.ContentType;
-import at.pcgamingfreaks.model.ThirdPartyService;
+import at.pcgamingfreaks.model.enums.MediaType;
+import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.dto.ListEntryDTO;
 import at.pcgamingfreaks.model.dto.UpdateScoreRequestDTO;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Comparator;
 import java.util.List;
 
-import static at.pcgamingfreaks.model.ThirdPartyService.hasUserConnection;
+import static at.pcgamingfreaks.model.enums.MediaSource.hasUserConnection;
 
 @Slf4j
 @RestController
@@ -37,8 +37,8 @@ public class DataController {
 	 */
 	@GetMapping("fetch/{username}/{service}/{type}")
 	public ResponseEntity<List<ListEntryDTO>> fetch(@PathVariable String username,
-													@PathVariable ThirdPartyService service,
-													@PathVariable ContentType type) {
+													@PathVariable MediaSource service,
+													@PathVariable MediaType type) {
 		DataService dataService = dataFactory.getProvider(service, type);
 		if (dataService == null) return ResponseEntity.notFound().build();
 		return ResponseEntity.ok(
@@ -57,8 +57,8 @@ public class DataController {
 	@PostMapping("update/{username}/{service}/{type}")
 	@PreAuthorize("authentication.principal.username == #username")
 	public void update(@PathVariable String username,
-					   @PathVariable ThirdPartyService service,
-					   @PathVariable ContentType type,
+					   @PathVariable MediaSource service,
+					   @PathVariable MediaType type,
 					   @RequestBody UpdateScoreRequestDTO request) {
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
 		if (!hasUserConnection(user, service))
@@ -75,7 +75,7 @@ public class DataController {
 	 */
 	@PostMapping("pull/{username}/{service}/{type}")
 	@PreAuthorize("authentication.principal.username == #username")
-	public void pull(@PathVariable String username, @PathVariable ThirdPartyService service, @PathVariable ContentType type) {
+	public void pull(@PathVariable String username, @PathVariable MediaSource service, @PathVariable MediaType type) {
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
 		if (!hasUserConnection(user, service)) throw new ThirdPartyUnconfiguredException(service);
 		dataFactory.getProvider(service, type).pull(username);
@@ -89,7 +89,7 @@ public class DataController {
 	 * @param type
 	 */
 	@GetMapping("push/{username}/{service}/{type}")
-	public void push(@PathVariable String username, @PathVariable ThirdPartyService service, @PathVariable ContentType type) {
+	public void push(@PathVariable String username, @PathVariable MediaSource service, @PathVariable MediaType type) {
 
 	}
 

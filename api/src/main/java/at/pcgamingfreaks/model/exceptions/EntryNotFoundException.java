@@ -1,13 +1,13 @@
 package at.pcgamingfreaks.model.exceptions;
 
-import at.pcgamingfreaks.model.ContentType;
+import at.pcgamingfreaks.model.enums.MediaType;
 
 public class EntryNotFoundException extends RuntimeException {
 	public EntryNotFoundException(String message) {
 		super(message);
 	}
 
-	public EntryNotFoundException(ContentType type, long id) {
+	public EntryNotFoundException(MediaType type, long id) {
 		super(String.format("%s entry with id %d not found", type, id));
 	}
 }

@@ -2,8 +2,8 @@ package at.pcgamingfreaks.service.thirdparty.data.trakt;
 
 import at.pcgamingfreaks.config.ThirdPartyConfig;
 import at.pcgamingfreaks.mapper.ListEntryDtoMapper;
-import at.pcgamingfreaks.model.ContentType;
-import at.pcgamingfreaks.model.ThirdPartyService;
+import at.pcgamingfreaks.model.enums.MediaType;
+import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.exceptions.ThirdPartySyncException;
 import at.pcgamingfreaks.model.repo.TraktEntryRepository;
@@ -35,8 +35,8 @@ public class TraktMovieData extends TraktDataService {
 	}
 
 	@Override
-	public ContentType getContentType() {
-		return ContentType.MOVIES;
+	public MediaType getContentType() {
+		return MediaType.MOVIES;
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class TraktMovieData extends TraktDataService {
 				.map(ratedMovie -> {
 					TraktEntry entry = new TraktEntry(
 							ratedMovie.movie.ids.trakt,
-							ContentType.MOVIES, null,
+							MediaType.MOVIES, null,
 							ratedMovie.movie.title,
 							coverFinder.findMovie(ratedMovie.movie.ids.tmdb)
 					);
@@ -61,7 +61,7 @@ public class TraktMovieData extends TraktDataService {
 				.map(baseMovie -> {
 					TraktEntry entry = new TraktEntry(
 							baseMovie.movie.ids.trakt,
-							ContentType.MOVIES, null,
+							MediaType.MOVIES, null,
 							baseMovie.movie.title,
 							coverFinder.findMovie(baseMovie.movie.ids.tmdb)
 					);
@@ -84,7 +84,7 @@ public class TraktMovieData extends TraktDataService {
 					thirdPartyConfig.getTrakt().getRedirectUrl())
 					.users()
 					.ratingsMovies(
-							UserSlug.fromUsername(user.getConnections().get(ThirdPartyService.TRAKT).getThirdPartyUserId()),
+							UserSlug.fromUsername(user.getConnections().get(MediaSource.TRAKT).getThirdPartyUserId()),
 							RatingsFilter.ALL,
 							Extended.FULL)
 					.execute();
@@ -107,7 +107,7 @@ public class TraktMovieData extends TraktDataService {
 					thirdPartyConfig.getTrakt().getRedirectUrl())
 					.users()
 					.watchedMovies(
-							UserSlug.fromUsername(user.getConnections().get(ThirdPartyService.TRAKT).getThirdPartyUserId()),
+							UserSlug.fromUsername(user.getConnections().get(MediaSource.TRAKT).getThirdPartyUserId()),
 							Extended.FULL)
 					.execute();
 
@@ -123,7 +123,7 @@ public class TraktMovieData extends TraktDataService {
 	protected void pushSingleChange(long id, float score, User user) {
 		try {
 			new TraktV2(thirdPartyConfig.getTrakt().getKey(), thirdPartyConfig.getTrakt().getSecret(), thirdPartyConfig.getTrakt().getRedirectUrl())
-					.accessToken(user.getConnections().get(ThirdPartyService.TRAKT).getAccessToken())
+					.accessToken(user.getConnections().get(MediaSource.TRAKT).getAccessToken())
 					.sync()
 					.addRatings(new SyncItems().movies(new SyncMovie()
 							.id(MovieIds.trakt((int) id))

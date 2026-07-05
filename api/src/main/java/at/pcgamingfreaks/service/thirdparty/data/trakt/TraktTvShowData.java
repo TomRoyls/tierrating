@@ -2,8 +2,8 @@ package at.pcgamingfreaks.service.thirdparty.data.trakt;
 
 import at.pcgamingfreaks.config.ThirdPartyConfig;
 import at.pcgamingfreaks.mapper.ListEntryDtoMapper;
-import at.pcgamingfreaks.model.ContentType;
-import at.pcgamingfreaks.model.ThirdPartyService;
+import at.pcgamingfreaks.model.enums.MediaType;
+import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.exceptions.ThirdPartySyncException;
 import at.pcgamingfreaks.model.repo.TraktEntryRepository;
@@ -35,8 +35,8 @@ public class TraktTvShowData extends TraktDataService {
 	}
 
 	@Override
-	public ContentType getContentType() {
-		return ContentType.TVSHOWS;
+	public MediaType getContentType() {
+		return MediaType.TVSHOWS;
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class TraktTvShowData extends TraktDataService {
 				.map(ratedShow -> {
 					TraktEntry entry = new TraktEntry(
 							ratedShow.show.ids.trakt,
-							ContentType.TVSHOWS, null,
+							MediaType.TVSHOWS, null,
 							ratedShow.show.title,
 							coverFinder.findShow(ratedShow.show.ids.tmdb)
 					);
@@ -61,7 +61,7 @@ public class TraktTvShowData extends TraktDataService {
 				.map(baseShow -> {
 					TraktEntry entry = new TraktEntry(
 							baseShow.show.ids.trakt,
-							ContentType.TVSHOWS, null,
+							MediaType.TVSHOWS, null,
 							baseShow.show.title,
 							coverFinder.findShow(baseShow.show.ids.tmdb)
 					);
@@ -84,7 +84,7 @@ public class TraktTvShowData extends TraktDataService {
 					thirdPartyConfig.getTrakt().getRedirectUrl())
 					.users()
 					.ratingsShows(
-							UserSlug.fromUsername(user.getConnections().get(ThirdPartyService.TRAKT).getThirdPartyUserId()),
+							UserSlug.fromUsername(user.getConnections().get(MediaSource.TRAKT).getThirdPartyUserId()),
 							RatingsFilter.ALL,
 							Extended.NOSEASONS)
 					.execute();
@@ -107,7 +107,7 @@ public class TraktTvShowData extends TraktDataService {
 					thirdPartyConfig.getTrakt().getRedirectUrl())
 					.users()
 					.watchedShows(
-							UserSlug.fromUsername(user.getConnections().get(ThirdPartyService.TRAKT).getThirdPartyUserId()),
+							UserSlug.fromUsername(user.getConnections().get(MediaSource.TRAKT).getThirdPartyUserId()),
 							Extended.NOSEASONS)
 					.execute();
 
@@ -123,7 +123,7 @@ public class TraktTvShowData extends TraktDataService {
 	protected void pushSingleChange(long id, float score, User user) {
 		try {
 			new TraktV2(thirdPartyConfig.getTrakt().getKey(), thirdPartyConfig.getTrakt().getSecret(), thirdPartyConfig.getTrakt().getRedirectUrl())
-					.accessToken(user.getConnections().get(ThirdPartyService.TRAKT).getAccessToken())
+					.accessToken(user.getConnections().get(MediaSource.TRAKT).getAccessToken())
 					.sync()
 					.addRatings(new SyncItems().shows(new SyncShow()
 							.id(ShowIds.trakt((int) id))

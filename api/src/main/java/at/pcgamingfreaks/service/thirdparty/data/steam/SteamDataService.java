@@ -1,7 +1,7 @@
 package at.pcgamingfreaks.service.thirdparty.data.steam;
 
 import at.pcgamingfreaks.config.ThirdPartyConfig;
-import at.pcgamingfreaks.model.ThirdPartyService;
+import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.dto.ListEntryDTO;
 import at.pcgamingfreaks.model.exceptions.EntryNotFoundException;
@@ -40,8 +40,8 @@ public abstract class SteamDataService implements DataService {
 	private final RestClient.Builder restClientBuilder = RestClient.builder();
 
 	@Override
-	public ThirdPartyService getService() {
-		return ThirdPartyService.STEAM;
+	public MediaSource getService() {
+		return MediaSource.STEAM;
 	}
 
 	@Override

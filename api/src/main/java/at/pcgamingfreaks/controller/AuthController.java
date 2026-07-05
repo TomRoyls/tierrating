@@ -1,6 +1,6 @@
 package at.pcgamingfreaks.controller;
 
-import at.pcgamingfreaks.model.ThirdPartyService;
+import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.dto.*;
 import at.pcgamingfreaks.service.AuthService;
 import at.pcgamingfreaks.service.thirdparty.auth.ThirdPartyAuthenticatorFactory;
@@ -55,7 +55,7 @@ public class AuthController {
 	@PreAuthorize("authentication.principal.username == #username")
 	@Validated
 	public void authThirdPartyOAuthAccount(
-			@PathVariable ThirdPartyService service,
+			@PathVariable MediaSource service,
 			@PathVariable String username,
 			@RequestBody ThirdPartyOAuthRequestDTO request
 	) {
@@ -67,7 +67,7 @@ public class AuthController {
 	@PreAuthorize("authentication.principal.username == #username")
 	@Validated
 	public void authThirdPartyOpenIdAccount(
-			@PathVariable ThirdPartyService service,
+			@PathVariable MediaSource service,
 			@PathVariable String username,
 			@RequestBody ThirdPartyOpenIdAuthRequestDTO request
 	) {

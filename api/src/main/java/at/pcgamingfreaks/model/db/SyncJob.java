@@ -1,8 +1,8 @@
 package at.pcgamingfreaks.model.db;
 
-import at.pcgamingfreaks.model.ContentType;
-import at.pcgamingfreaks.model.SyncStatus;
-import at.pcgamingfreaks.model.ThirdPartyService;
+import at.pcgamingfreaks.model.enums.MediaType;
+import at.pcgamingfreaks.model.enums.SyncStatus;
+import at.pcgamingfreaks.model.enums.MediaSource;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -28,11 +28,11 @@ public class SyncJob {
 
 	@NotNull
 	@Column(nullable = false)
-	private ThirdPartyService mediaSource;
+	private MediaSource mediaSource;
 
 	@NotNull
 	@Column(nullable = false)
-	private ContentType mediaType;
+	private MediaType mediaType;
 
 	@NotNull
 	@Column(nullable = false)

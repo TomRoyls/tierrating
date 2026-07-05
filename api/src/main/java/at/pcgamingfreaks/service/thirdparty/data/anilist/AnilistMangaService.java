@@ -3,7 +3,7 @@ package at.pcgamingfreaks.service.thirdparty.data.anilist;
 
 import at.pcgamingfreaks.config.ThirdPartyConfig;
 import at.pcgamingfreaks.mapper.ListEntryDtoMapper;
-import at.pcgamingfreaks.model.ContentType;
+import at.pcgamingfreaks.model.enums.MediaType;
 import at.pcgamingfreaks.model.repo.AniListEntryRepository;
 import at.pcgamingfreaks.model.repo.AniListEntryScoreRepository;
 import at.pcgamingfreaks.model.repo.UserRepository;
@@ -17,7 +17,7 @@ public class AnilistMangaService extends AnilistDataService {
 	}
 
 	@Override
-	public ContentType getContentType() {
-		return ContentType.MANGA;
+	public MediaType getContentType() {
+		return MediaType.MANGA;
 	}
 }

@@ -1,6 +1,6 @@
 package at.pcgamingfreaks.service.thirdparty.auth;
 
-import at.pcgamingfreaks.model.ThirdPartyService;
+import at.pcgamingfreaks.model.enums.MediaSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,19 +10,19 @@ import java.util.stream.Collectors;
 
 @Service
 public class ThirdPartyAuthenticatorFactory {
-	private final Map<ThirdPartyService, ThirdPartyOAuthAuthenticatorService> oauthProviders;
-	private final Map<ThirdPartyService, ThirdPartyOpenIdAuthenticatorService> openIdProviders;
+	private final Map<MediaSource, ThirdPartyOAuthAuthenticatorService> oauthProviders;
+	private final Map<MediaSource, ThirdPartyOpenIdAuthenticatorService> openIdProviders;
 
 	@Autowired
 	public ThirdPartyAuthenticatorFactory(List<ThirdPartyOAuthAuthenticatorService> oauthProviders,
 										  List<ThirdPartyOpenIdAuthenticatorService> openIdProviders) {
 		this.oauthProviders = oauthProviders.stream()
-				.collect(Collectors.toMap(ThirdPartyOAuthAuthenticatorService::getService, provider -> provider));
+				.collect(Collectors.toMap(ThirdPartyOAuthAuthenticatorService::getMediaSource, provider -> provider));
 		this.openIdProviders = openIdProviders.stream()
 				.collect(Collectors.toMap(ThirdPartyOpenIdAuthenticatorService::getService, provider -> provider));
 	}
 
-	public ThirdPartyOAuthAuthenticatorService getOauthProvider(ThirdPartyService service) {
+	public ThirdPartyOAuthAuthenticatorService getOauthProvider(MediaSource service) {
 		ThirdPartyOAuthAuthenticatorService provider = oauthProviders.get(service);
 		if (provider == null) {
 			throw new IllegalArgumentException("Third party service not found: " + service);
@@ -30,7 +30,7 @@ public class ThirdPartyAuthenticatorFactory {
 		return provider;
 	}
 
-	public ThirdPartyOpenIdAuthenticatorService getOpenIdProvider(ThirdPartyService service) {
+	public ThirdPartyOpenIdAuthenticatorService getOpenIdProvider(MediaSource service) {
 		ThirdPartyOpenIdAuthenticatorService provider = openIdProviders.get(service);
 		if (provider == null) {
 			throw new IllegalArgumentException("Third party service not found: " + service);

@@ -1,9 +1,8 @@
 package at.pcgamingfreaks.controller;
 
-import at.pcgamingfreaks.config.ServiceConfig;
 import at.pcgamingfreaks.config.ThirdPartyConfig;
 import at.pcgamingfreaks.config.ThirdPartyServiceConfig;
-import at.pcgamingfreaks.model.ThirdPartyService;
+import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.dto.ThirdPartyInfoResponseDTO;
 import at.pcgamingfreaks.service.thirdparty.info.ThirdPartyInfoFactory;
 import lombok.RequiredArgsConstructor;
@@ -32,24 +31,24 @@ public class ThirdPartyInfoController {
 	private final Pattern configValidPattern = Pattern.compile("get(?<service>.*)");
 
 	@GetMapping("{service}")
-	public ResponseEntity<ThirdPartyInfoResponseDTO> info(@PathVariable ThirdPartyService service) {
+	public ResponseEntity<ThirdPartyInfoResponseDTO> info(@PathVariable MediaSource service) {
 		return ResponseEntity.ok(thirdPartyInfoFactory.getProvider(service).info());
 	}
 
 	@GetMapping("services")
 	public ResponseEntity<List<String>> getAvailableServices() throws InvocationTargetException, IllegalAccessException {
-		List<ThirdPartyService> services = new ArrayList<>();
+		List<MediaSource> services = new ArrayList<>();
 		Method[] methods = thirdPartyConfig.getClass().getMethods();
 		for (Method method : methods) {
 			if (Arrays.asList(method.getReturnType().getInterfaces()).contains(ThirdPartyServiceConfig.class)) {
 				ThirdPartyServiceConfig serviceConfig = (ThirdPartyServiceConfig) method.invoke(thirdPartyConfig);
 				Matcher matcher = configValidPattern.matcher(method.getName());
 				if (serviceConfig.isValid() && matcher.find()) {
-					services.add(ThirdPartyService.from(matcher.group("service")));
+					services.add(MediaSource.from(matcher.group("service")));
 				}
 			}
 		}
-		services.remove(ThirdPartyService.TMDB); // only cover image provider and should therefore not be included
-		return ResponseEntity.ok(services.stream().map(ThirdPartyService::name).toList());
+		services.remove(MediaSource.TMDB); // only cover image provider and should therefore not be included
+		return ResponseEntity.ok(services.stream().map(MediaSource::name).toList());
 	}
 }

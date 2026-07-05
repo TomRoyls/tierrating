@@ -1,7 +1,6 @@
 package at.pcgamingfreaks.model.db;
 
-import at.pcgamingfreaks.model.ThirdPartyService;
-import at.pcgamingfreaks.model.auth.ThirdPartyConnection;
+import at.pcgamingfreaks.model.enums.MediaSource;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -15,7 +14,6 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -53,8 +51,8 @@ public class User implements UserDetails {
 	private String bio;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "user")
-	@MapKey(name = "service")
-	private Map<ThirdPartyService, ThirdPartyConnection> connections;
+	@MapKey(name = "source")
+	private Map<MediaSource, MediaSourceConnection> connections;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
 	private List<Tierlist> tierlists;

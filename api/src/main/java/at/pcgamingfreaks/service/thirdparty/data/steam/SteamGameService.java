@@ -1,7 +1,7 @@
 package at.pcgamingfreaks.service.thirdparty.data.steam;
 
 import at.pcgamingfreaks.config.ThirdPartyConfig;
-import at.pcgamingfreaks.model.ContentType;
+import at.pcgamingfreaks.model.enums.MediaType;
 import at.pcgamingfreaks.model.repo.SteamEntryRepository;
 import at.pcgamingfreaks.model.repo.SteamEntryScoreRepository;
 import at.pcgamingfreaks.model.repo.UserRepository;
@@ -14,7 +14,7 @@ public class SteamGameService extends SteamDataService {
 	}
 
 	@Override
-	public ContentType getContentType() {
-		return ContentType.GAMES;
+	public MediaType getContentType() {
+		return MediaType.GAMES;
 	}
 }

@@ -1,10 +1,10 @@
 package at.pcgamingfreaks.controller;
 
 import at.pcgamingfreaks.mapper.UserDtoMapper;
-import at.pcgamingfreaks.model.ThirdPartyService;
+import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.dto.UserDTO;
-import at.pcgamingfreaks.model.repo.ThirdPartyConnectionRepository;
+import at.pcgamingfreaks.model.repo.MediaSourceConnectionRepository;
 import at.pcgamingfreaks.model.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user")
 public class UserController {
 	private final UserRepository userRepository;
-	private final ThirdPartyConnectionRepository thirdpartyConnectionRepository;
+	private final MediaSourceConnectionRepository mediaSourceConnectionRepository;
 
 	@GetMapping("{username}")
 	public ResponseEntity<UserDTO> user(@PathVariable String username) {
@@ -30,9 +30,9 @@ public class UserController {
 
 	@DeleteMapping("{username}/remove/{service}")
 	@PreAuthorize("authentication.principal.username == #username")
-	public void removeThirdPartyService(@PathVariable String username, @PathVariable ThirdPartyService service) {
+	public void removeThirdPartyService(@PathVariable String username, @PathVariable MediaSource service) {
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
-		thirdpartyConnectionRepository.deleteById(user.getConnections().get(service).getId());
+		mediaSourceConnectionRepository.deleteById(user.getConnections().get(service).getId());
 		user.getConnections().put(service, null);
 		userRepository.save(user);
 	}

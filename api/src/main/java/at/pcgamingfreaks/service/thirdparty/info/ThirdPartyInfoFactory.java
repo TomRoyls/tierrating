@@ -1,6 +1,6 @@
 package at.pcgamingfreaks.service.thirdparty.info;
 
-import at.pcgamingfreaks.model.ThirdPartyService;
+import at.pcgamingfreaks.model.enums.MediaSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class ThirdPartyInfoFactory {
-	private final Map<ThirdPartyService, ThirdPartyInfoService> providers;
+	private final Map<MediaSource, ThirdPartyInfoService> providers;
 
 	@Autowired
 	public ThirdPartyInfoFactory(List<ThirdPartyInfoService> providerList) {
@@ -18,7 +18,7 @@ public class ThirdPartyInfoFactory {
 				.collect(Collectors.toMap(ThirdPartyInfoService::getService, provider -> provider));
 	}
 
-	public ThirdPartyInfoService getProvider(ThirdPartyService service) {
+	public ThirdPartyInfoService getProvider(MediaSource service) {
 		ThirdPartyInfoService provider = providers.get(service);
 		if (provider == null) {
 			throw new IllegalArgumentException("Third party service not found: " + service);

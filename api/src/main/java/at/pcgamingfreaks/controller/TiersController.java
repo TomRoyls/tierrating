@@ -1,7 +1,7 @@
 package at.pcgamingfreaks.controller;
 
-import at.pcgamingfreaks.model.ContentType;
-import at.pcgamingfreaks.model.ThirdPartyService;
+import at.pcgamingfreaks.model.enums.MediaType;
+import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.dto.TierDTO;
 import at.pcgamingfreaks.model.dto.TiersUpdateRequest;
 import at.pcgamingfreaks.service.TiersService;
@@ -24,14 +24,14 @@ public class TiersController {
 	 * @return list of tier grades sorted by score
 	 */
 	@GetMapping("{username}/{service}/{type}")
-	public ResponseEntity<List<TierDTO>> getTierlist(@PathVariable String username, @PathVariable ThirdPartyService service, @PathVariable ContentType type) {
+	public ResponseEntity<List<TierDTO>> getTierlist(@PathVariable String username, @PathVariable MediaSource service, @PathVariable MediaType type) {
 		return ResponseEntity.ok(tiersService.getTierlist(username, service, type));
 	}
 
 	@PostMapping("{username}/{service}/{type}")
 	@PreAuthorize("authentication.principal.username == #username")
-	public void setTierlist(@PathVariable String username, @PathVariable ThirdPartyService service,
-							@PathVariable ContentType type, @RequestBody TiersUpdateRequest request) {
+	public void setTierlist(@PathVariable String username, @PathVariable MediaSource service,
+	                        @PathVariable MediaType type, @RequestBody TiersUpdateRequest request) {
 		tiersService.updateTierlist(username, service, type, request.getTiers());
 	}
 }

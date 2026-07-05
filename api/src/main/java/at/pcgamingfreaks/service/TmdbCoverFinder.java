@@ -12,7 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import static at.pcgamingfreaks.model.ThirdPartyService.TMDB;
+import static at.pcgamingfreaks.model.enums.MediaSource.TMDB;
 
 @Slf4j
 @Service

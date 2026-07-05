@@ -1,9 +1,9 @@
 package at.pcgamingfreaks.controller;
 
-import at.pcgamingfreaks.model.ContentType;
+import at.pcgamingfreaks.model.db.MediaSourceConnection;
+import at.pcgamingfreaks.model.enums.MediaType;
 import at.pcgamingfreaks.model.db.Tier;
 import at.pcgamingfreaks.model.db.Tierlist;
-import at.pcgamingfreaks.model.auth.ThirdPartyConnection;
 import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.dto.TierDTO;
 import at.pcgamingfreaks.model.exceptions.ThirdPartyUnconfiguredException;
@@ -24,7 +24,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.*;
 import java.util.stream.Stream;
 
-import static at.pcgamingfreaks.model.ThirdPartyService.ANILIST;
+import static at.pcgamingfreaks.model.enums.MediaSource.ANILIST;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -53,7 +53,7 @@ class TiersControllerTest {
 	public void setTierListNotFound(Optional<User> user, Class<RuntimeException> expectedException) {
 		user.ifPresent(u -> u.setConnections(new HashMap<>()));
 		when(userRepository.findByUsername(any())).thenReturn(user);
-		assertThrows(expectedException, () -> tiersService.updateTierlist("testing", ANILIST, ContentType.ANIME, new ArrayList<>()));
+		assertThrows(expectedException, () -> tiersService.updateTierlist("testing", ANILIST, MediaType.ANIME, new ArrayList<>()));
 	}
 
 	private static Stream<Arguments> settingTierlist() {
@@ -101,7 +101,7 @@ class TiersControllerTest {
 	public void setTierListExisting(List<Tier> immutableExistingTiers, List<TierDTO> changedTiers, List<Tier> expectedTiers, List<Tier> expectedRemovedTiers) {
 		User user = new User();
 		user.setUsername("test");
-		user.setConnections(Map.of(ANILIST, new ThirdPartyConnection()));
+		user.setConnections(Map.of(ANILIST, new MediaSourceConnection()));
 		when(userRepository.findByUsername(any())).thenReturn(Optional.of(user));
 
 		List<Tier> existingTiers = new ArrayList<>(immutableExistingTiers);
@@ -114,7 +114,7 @@ class TiersControllerTest {
 		ArgumentCaptor<Tierlist> tierListCaptor = ArgumentCaptor.forClass(Tierlist.class);
 		ArgumentCaptor<List<Tier>> tiersCaptor = ArgumentCaptor.forClass(List.class);
 
-		tiersService.updateTierlist("test", ANILIST, ContentType.ANIME, changedTiers);
+		tiersService.updateTierlist("test", ANILIST, MediaType.ANIME, changedTiers);
 
 		verify(tierListsRepository, times(1)).save(tierListCaptor.capture());
 

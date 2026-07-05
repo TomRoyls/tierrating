@@ -1,6 +1,6 @@
 package at.pcgamingfreaks.model.thirdparty.anilist;
 
-import at.pcgamingfreaks.model.ContentType;
+import at.pcgamingfreaks.model.enums.MediaType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +21,7 @@ public class AniListEntry implements Persistable<Long> {
 	private Long id;
 
 	@Enumerated(EnumType.STRING)
-	private ContentType type;
+	private MediaType type;
 
 	private String title;
 	private String titleRomaji;

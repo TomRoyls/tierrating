@@ -1,14 +1,14 @@
 package at.pcgamingfreaks.service.thirdparty.auth;
 
 import at.pcgamingfreaks.config.ThirdPartyConfig;
-import at.pcgamingfreaks.model.ThirdPartyService;
-import at.pcgamingfreaks.model.auth.ThirdPartyConnection;
+import at.pcgamingfreaks.model.db.MediaSourceConnection;
+import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.dto.AuthTokenResponseDTO;
 import at.pcgamingfreaks.model.dto.ThirdPartyOAuthRequestDTO;
 import at.pcgamingfreaks.model.exceptions.ThirdPartyAuthenticationException;
 import at.pcgamingfreaks.model.exceptions.ThirdPartyUnconfiguredException;
-import at.pcgamingfreaks.model.repo.ThirdPartyConnectionRepository;
+import at.pcgamingfreaks.model.repo.MediaSourceConnectionRepository;
 import at.pcgamingfreaks.model.repo.UserRepository;
 import at.pcgamingfreaks.model.util.JwtPayload;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,36 +29,36 @@ import java.util.Map;
 @Service
 public class AniListAuthenticatorService implements ThirdPartyOAuthAuthenticatorService {
 	private final UserRepository userRepository;
-	private final ThirdPartyConnectionRepository thirdPartyConnectionRepository;
+	private final MediaSourceConnectionRepository mediaSourceConnectionRepository;
 	private final ThirdPartyConfig thirdPartyConfig;
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
 	@Override
-	public ThirdPartyService getService() {
-		return ThirdPartyService.ANILIST;
+	public MediaSource getMediaSource() {
+		return MediaSource.ANILIST;
 	}
 
 	@Override
 	public void auth(String username, ThirdPartyOAuthRequestDTO request) {
 		if (!thirdPartyConfig.getAnilist().isValid())
-			throw new ThirdPartyUnconfiguredException(getService());
+			throw new ThirdPartyUnconfiguredException(getMediaSource());
 
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
-		if (user.getConnections().get(getService()) != null)
+		if (user.getConnections().get(getMediaSource()) != null)
 			throw new ThirdPartyAuthenticationException("Already authenticated");
 
 		try {
 
 			AuthTokenResponseDTO tokenResponse = auth(request.getCode());
 
-			ThirdPartyConnection connection = new ThirdPartyConnection();
-			connection.setService(getService());
+			MediaSourceConnection connection = new MediaSourceConnection();
+			connection.setSource(getMediaSource());
 			connection.setAccessToken(tokenResponse.getAccessToken());
 			connection.setRefreshToken(tokenResponse.getRefreshToken());
 			connection.setExpiresOn(LocalDateTime.now().plusSeconds(tokenResponse.getExpiresIn()));
 			connection.setThirdPartyUserId(String.valueOf(extractUserIdFrom(connection.getAccessToken())));
 			connection.setUser(user);
-			thirdPartyConnectionRepository.save(connection);
+			mediaSourceConnectionRepository.save(connection);
 		} catch (Exception e) {
 			throw new ThirdPartyAuthenticationException(e);
 		}

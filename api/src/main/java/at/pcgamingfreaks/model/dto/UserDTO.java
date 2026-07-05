@@ -1,11 +1,10 @@
 package at.pcgamingfreaks.model.dto;
 
-import at.pcgamingfreaks.model.ThirdPartyService;
+import at.pcgamingfreaks.model.enums.MediaSource;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Set;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -15,5 +14,5 @@ public class UserDTO {
 	private String username;
 	private String bio;
 
-	private Set<ThirdPartyService> connectedServices;
+	private Set<MediaSource> connectedServices;
 }

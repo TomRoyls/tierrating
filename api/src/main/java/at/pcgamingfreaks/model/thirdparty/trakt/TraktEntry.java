@@ -1,6 +1,6 @@
 package at.pcgamingfreaks.model.thirdparty.trakt;
 
-import at.pcgamingfreaks.model.ContentType;
+import at.pcgamingfreaks.model.enums.MediaType;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -19,7 +19,7 @@ import java.util.Objects;
 @Entity(name = "trakt_entries")
 public class TraktEntry implements Persistable<Long> {
 
-	public TraktEntry(long id, ContentType type, @Nullable Integer season, String title, String cover) {
+	public TraktEntry(long id, MediaType type, @Nullable Integer season, String title, String cover) {
 		this.id = id;
 		this.type = type;
 		this.season = season;
@@ -31,7 +31,7 @@ public class TraktEntry implements Persistable<Long> {
 	private Long id;
 
 	@Enumerated(EnumType.STRING)
-	private ContentType type;
+	private MediaType type;
 
 	@Nullable
 	private Integer season;

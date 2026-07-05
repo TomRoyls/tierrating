@@ -1,7 +1,7 @@
 package at.pcgamingfreaks.model.db;
 
-import at.pcgamingfreaks.model.ContentType;
-import at.pcgamingfreaks.model.ThirdPartyService;
+import at.pcgamingfreaks.model.enums.MediaType;
+import at.pcgamingfreaks.model.enums.MediaSource;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -35,12 +35,12 @@ public class Tierlist {
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
-	private ThirdPartyService service;
+	private MediaSource service;
 
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
-	private ContentType type;
+	private MediaType type;
 
 	@ElementCollection
 	@CollectionTable(

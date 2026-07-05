@@ -1,13 +1,13 @@
 package at.pcgamingfreaks.service.thirdparty.auth;
 
 import at.pcgamingfreaks.config.ThirdPartyConfig;
-import at.pcgamingfreaks.model.ThirdPartyService;
-import at.pcgamingfreaks.model.auth.ThirdPartyConnection;
+import at.pcgamingfreaks.model.db.MediaSourceConnection;
+import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.dto.ThirdPartyOAuthRequestDTO;
 import at.pcgamingfreaks.model.exceptions.ThirdPartyAuthenticationException;
 import at.pcgamingfreaks.model.exceptions.ThirdPartyUnconfiguredException;
-import at.pcgamingfreaks.model.repo.ThirdPartyConnectionRepository;
+import at.pcgamingfreaks.model.repo.MediaSourceConnectionRepository;
 import at.pcgamingfreaks.model.repo.UserRepository;
 import com.uwetrottmann.trakt5.TraktV2;
 import com.uwetrottmann.trakt5.entities.AccessToken;
@@ -25,20 +25,20 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class TraktAuthenticatorService implements ThirdPartyOAuthAuthenticatorService {
 	private final UserRepository userRepository;
-	private final ThirdPartyConnectionRepository thirdPartyConnectionRepository;
+	private final MediaSourceConnectionRepository mediaSourceConnectionRepository;
 	private final ThirdPartyConfig thirdPartyConfig;
 
 	@Override
-	public ThirdPartyService getService() {
-		return ThirdPartyService.TRAKT;
+	public MediaSource getMediaSource() {
+		return MediaSource.TRAKT;
 	}
 
 	@Override
 	public void auth(String username, ThirdPartyOAuthRequestDTO request) {
-		if (!thirdPartyConfig.getTrakt().isValid()) throw new ThirdPartyUnconfiguredException(getService());
+		if (!thirdPartyConfig.getTrakt().isValid()) throw new ThirdPartyUnconfiguredException(getMediaSource());
 
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
-		if (user.getConnections().get(getService()) != null)
+		if (user.getConnections().get(getMediaSource()) != null)
 			throw new ThirdPartyAuthenticationException("Already authenticated");
 
 		try {
@@ -51,14 +51,14 @@ public class TraktAuthenticatorService implements ThirdPartyOAuthAuthenticatorSe
 			if (!traktUserInfo.isSuccessful())
 				throw new ThirdPartyAuthenticationException("Trakt OAuth responded with empty username");
 
-			ThirdPartyConnection connection = new ThirdPartyConnection();
-			connection.setService(getService());
+			MediaSourceConnection connection = new MediaSourceConnection();
+			connection.setSource(getMediaSource());
 			connection.setAccessToken(response.body().access_token);
 			connection.setRefreshToken(response.body().refresh_token);
 			connection.setExpiresOn(LocalDateTime.now().plusSeconds(response.body().expires_in));
 			connection.setThirdPartyUserId(traktUserInfo.body().ids.slug);
 			connection.setUser(user);
-			thirdPartyConnectionRepository.save(connection);
+			mediaSourceConnectionRepository.save(connection);
 		} catch (IOException e) {
 			throw new ThirdPartyAuthenticationException(e);
 		}

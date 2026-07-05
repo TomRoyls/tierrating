@@ -1,11 +1,11 @@
 package at.pcgamingfreaks.mapper.converter;
 
-import at.pcgamingfreaks.model.ThirdPartyService;
+import at.pcgamingfreaks.model.enums.MediaSource;
 import org.springframework.core.convert.converter.Converter;
 
-public class StringToServiceConverter implements Converter<String, ThirdPartyService> {
+public class StringToServiceConverter implements Converter<String, MediaSource> {
 	@Override
-	public ThirdPartyService convert(String source) {
-		return ThirdPartyService.from(source.toUpperCase());
+	public MediaSource convert(String source) {
+		return MediaSource.from(source.toUpperCase());
 	}
 }

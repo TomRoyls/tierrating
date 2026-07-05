@@ -1,6 +1,6 @@
 package at.pcgamingfreaks.service.tokenfreshing;
 
-import at.pcgamingfreaks.model.ThirdPartyService;
+import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class TokenRefreshService {
 		List<User> users = userRepository.findAll();
 
 		for (User user : users) {
-			if (user.getConnections().get(ThirdPartyService.TRAKT) != null && traktTokenRefresher.isValid())
+			if (user.getConnections().get(MediaSource.TRAKT) != null && traktTokenRefresher.isValid())
 				traktTokenRefresher.refresh(user);
 		}
 		log.info("Refreshed tokens");

@@ -1,8 +1,8 @@
 package at.pcgamingfreaks.service.tokenfreshing;
 
 import at.pcgamingfreaks.config.ThirdPartyConfig;
-import at.pcgamingfreaks.model.ThirdPartyService;
-import at.pcgamingfreaks.model.auth.ThirdPartyConnection;
+import at.pcgamingfreaks.model.db.MediaSourceConnection;
+import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.exceptions.ThirdPartyAuthenticationException;
 import at.pcgamingfreaks.model.repo.UserRepository;
@@ -30,7 +30,7 @@ public class TraktTokenRefresher implements TokenRefresher {
 
 	@Override
 	public void refresh(User user) {
-		ThirdPartyConnection connection = user.getConnections().get(ThirdPartyService.TRAKT);
+		MediaSourceConnection connection = user.getConnections().get(MediaSource.TRAKT);
 		if (connection.getExpiresOn().isBefore(LocalDateTime.now().plusDays(2))) {
 			try {
 				TraktV2 trakt = new TraktV2(thirdPartyConfig.getTrakt().getKey(), thirdPartyConfig.getTrakt().getSecret(), thirdPartyConfig.getTrakt().getRedirectUrl());

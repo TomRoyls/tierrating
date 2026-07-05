@@ -1,13 +1,14 @@
 package at.pcgamingfreaks.service.thirdparty.auth;
 
 import at.pcgamingfreaks.config.ThirdPartyConfig;
-import at.pcgamingfreaks.model.ThirdPartyService;
-import at.pcgamingfreaks.model.auth.ThirdPartyConnection;
+import at.pcgamingfreaks.model.db.MediaSourceConnection;
+import at.pcgamingfreaks.model.db.MediaTypeSettings;
+import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.dto.ThirdPartyOpenIdAuthRequestDTO;
 import at.pcgamingfreaks.model.exceptions.ThirdPartyAuthenticationException;
 import at.pcgamingfreaks.model.exceptions.ThirdPartyUnconfiguredException;
-import at.pcgamingfreaks.model.repo.ThirdPartyConnectionRepository;
+import at.pcgamingfreaks.model.repo.MediaSourceConnectionRepository;
 import at.pcgamingfreaks.model.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static at.pcgamingfreaks.model.enums.MediaType.GAMES;
 import static java.net.URLEncoder.encode;
 
 @Slf4j
@@ -32,13 +34,13 @@ public class SteamAuthenticatorService implements ThirdPartyOpenIdAuthenticatorS
 	private static final String STEAM_ID_PATTERN = "https://steamcommunity.com/openid/id/(\\d+)";
 
 	private final UserRepository userRepository;
-	private final ThirdPartyConnectionRepository thirdPartyConnectionRepository;
+	private final MediaSourceConnectionRepository mediaSourceConnectionRepository;
 	private final ThirdPartyConfig thirdPartyConfig;
 	private final RestClient.Builder restClientBuilder = RestClient.builder();
 
 	@Override
-	public ThirdPartyService getService() {
-		return ThirdPartyService.STEAM;
+	public MediaSource getService() {
+		return MediaSource.STEAM;
 	}
 
 	@Override
@@ -72,12 +74,16 @@ public class SteamAuthenticatorService implements ThirdPartyOpenIdAuthenticatorS
 
 		String steamId = extractSteamId(request.getParams().get("openid.claimed_id"));
 
-		ThirdPartyConnection connection = new ThirdPartyConnection();
-		connection.setService(getService());
+		MediaSourceConnection connection = new MediaSourceConnection();
+		connection.setSource(getService());
 		connection.setUser(user);
 		connection.setThirdPartyUserId(steamId);
-		connection.setAutoUpdateSync(false);
-		thirdPartyConnectionRepository.save(connection);
+
+		MediaTypeSettings settings = new MediaTypeSettings();
+		settings.setType(GAMES);
+		settings.setAutoPush(false);
+		connection.putMediaTypeSettings(settings);
+		mediaSourceConnectionRepository.save(connection);
 	}
 
 	private String extractSteamId(String claimedId) {

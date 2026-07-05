@@ -1,8 +1,8 @@
 package at.pcgamingfreaks.service;
 
 import at.pcgamingfreaks.mapper.TierDtoMapper;
-import at.pcgamingfreaks.model.ContentType;
-import at.pcgamingfreaks.model.ThirdPartyService;
+import at.pcgamingfreaks.model.enums.MediaType;
+import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.db.Tierlist;
 import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.dto.TierDTO;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static at.pcgamingfreaks.model.ThirdPartyService.hasUserConnection;
+import static at.pcgamingfreaks.model.enums.MediaSource.hasUserConnection;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +25,7 @@ public class TiersService {
 	private final UserRepository userRepository;
 	private final TierListsRepository tierListsRepository;
 
-	public List<TierDTO> getTierlist(String username, ThirdPartyService service, ContentType type) {
+	public List<TierDTO> getTierlist(String username, MediaSource service, MediaType type) {
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
 		if (!hasUserConnection(user, service)) throw new ThirdPartyUnconfiguredException(service);
 
@@ -41,7 +41,7 @@ public class TiersService {
 	}
 
 	@Transactional
-	public void updateTierlist(String username, ThirdPartyService service, ContentType type, List<TierDTO> changedTierlist) {
+	public void updateTierlist(String username, MediaSource service, MediaType type, List<TierDTO> changedTierlist) {
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
 		if (!hasUserConnection(user, service)) throw new ThirdPartyUnconfiguredException(service);
 

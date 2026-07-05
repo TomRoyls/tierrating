@@ -2,8 +2,8 @@ package at.pcgamingfreaks.service.thirdparty.data.trakt;
 
 import at.pcgamingfreaks.config.ThirdPartyConfig;
 import at.pcgamingfreaks.mapper.ListEntryDtoMapper;
-import at.pcgamingfreaks.model.ContentType;
-import at.pcgamingfreaks.model.ThirdPartyService;
+import at.pcgamingfreaks.model.enums.MediaType;
+import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.exceptions.ThirdPartySyncException;
 import at.pcgamingfreaks.model.repo.TraktEntryRepository;
@@ -17,7 +17,6 @@ import com.uwetrottmann.trakt5.entities.RatedSeason;
 import com.uwetrottmann.trakt5.entities.UserSlug;
 import com.uwetrottmann.trakt5.enums.Extended;
 import com.uwetrottmann.trakt5.enums.RatingsFilter;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import retrofit2.Response;
@@ -35,8 +34,8 @@ public class TraktTvShowSeasonsData extends TraktDataService {
 	}
 
 	@Override
-	public ContentType getContentType() {
-		return ContentType.TVSHOWS_SEASONS;
+	public MediaType getContentType() {
+		return MediaType.TVSHOWS_SEASONS;
 	}
 
 	@Override
@@ -46,7 +45,7 @@ public class TraktTvShowSeasonsData extends TraktDataService {
 				.map(ratedSeason -> {
 					TraktEntry entry = new TraktEntry(
 							ratedSeason.season.ids.trakt,
-							ContentType.TVSHOWS_SEASONS,
+							MediaType.TVSHOWS_SEASONS,
 							ratedSeason.season.number,
 							String.format("%s Season %d", ratedSeason.show.title, ratedSeason.season.number),
 							coverFinder.findSeason(ratedSeason.show.ids.tmdb, ratedSeason.season.number)
@@ -70,7 +69,7 @@ public class TraktTvShowSeasonsData extends TraktDataService {
 					thirdPartyConfig.getTrakt().getRedirectUrl())
 					.users()
 					.ratingsSeasons(
-							UserSlug.fromUsername(user.getConnections().get(ThirdPartyService.TRAKT).getThirdPartyUserId()),
+							UserSlug.fromUsername(user.getConnections().get(MediaSource.TRAKT).getThirdPartyUserId()),
 							RatingsFilter.ALL,
 							Extended.FULL)
 					.execute();
@@ -93,11 +92,11 @@ public class TraktTvShowSeasonsData extends TraktDataService {
 		String body = "{\"seasons\":[{\"ids\":{\"trakt\":" + id + "},\"rating\":" + (int) score + "}]}";
 		RestClient.builder()
 				.baseUrl(TRAKT_API)
-				.defaultHeader("Authorization", user.getConnections().get(ThirdPartyService.TRAKT).getAccessToken())
+				.defaultHeader("Authorization", user.getConnections().get(MediaSource.TRAKT).getAccessToken())
 				.build()
 				.post()
 				.uri("/sync/ratings")
-				.contentType(MediaType.APPLICATION_JSON)
+				.contentType(org.springframework.http.MediaType.APPLICATION_JSON)
 				.header("trakt-api-key", thirdPartyConfig.getTrakt().getKey())
 				.body(body)
 				.retrieve()

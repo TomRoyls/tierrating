@@ -1,8 +1,8 @@
-package at.pcgamingfreaks.model;
+package at.pcgamingfreaks.model.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
-public enum ContentType {
+public enum MediaType {
 	ANIME,
 	MANGA,
 	MOVIES,
@@ -11,9 +11,9 @@ public enum ContentType {
 	GAMES;
 
 	@JsonCreator(mode = JsonCreator.Mode.DELEGATING)
-	public static ContentType from(String text) {
+	public static MediaType from(String text) {
 		text = text.replace("-", "_");
-		for (ContentType type : ContentType.values()) {
+		for (MediaType type : MediaType.values()) {
 			if (type.name().equalsIgnoreCase(text)) return type;
 		}
 		throw new IllegalArgumentException();

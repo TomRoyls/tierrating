@@ -2,7 +2,8 @@ package at.pcgamingfreaks.service.thirdparty.data.anilist;
 
 import at.pcgamingfreaks.config.ThirdPartyConfig;
 import at.pcgamingfreaks.mapper.ListEntryDtoMapper;
-import at.pcgamingfreaks.model.ThirdPartyService;
+import at.pcgamingfreaks.model.db.MediaTypeSettings;
+import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.dto.ListEntryDTO;
 import at.pcgamingfreaks.model.exceptions.EntryNotFoundException;
@@ -42,8 +43,8 @@ public abstract class AnilistDataService implements DataService {
 	private final ThirdPartyConfig thirdPartyConfig;
 	private final ListEntryDtoMapper listEntryDtoMapper;
 
-	public ThirdPartyService getService() {
-		return ThirdPartyService.ANILIST;
+	public MediaSource getService() {
+		return MediaSource.ANILIST;
 	}
 
 	@Override
@@ -100,7 +101,7 @@ public abstract class AnilistDataService implements DataService {
 
 			page = HttpGraphQlClient.create(WebClient.create(ANILIST_API_URL))
 					.document(query)
-					.variable("userId", user.getConnections().get(ThirdPartyService.ANILIST).getThirdPartyUserId())
+					.variable("userId", user.getConnections().get(MediaSource.ANILIST).getThirdPartyUserId())
 					.variable("type", getContentType().name())
 					.variable("status", "COMPLETED")
 					.variable("page", currentPage++)
@@ -185,7 +186,8 @@ public abstract class AnilistDataService implements DataService {
 		entryScore.setScore(score);
 		aniListEntryScoreRepository.save(entryScore);
 
-		if (user.getConnections().get(getService()).isAutoUpdateSync()) pushSingleChange(id, score, user);
+		MediaTypeSettings settings = user.getConnections().get(getService()).getMediaTypeSettings().get(getContentType());
+		if (settings != null && settings.isAutoPush()) pushSingleChange(id, score, user);
 	}
 
 	protected void pushSingleChange(long id, float score, User user) {
@@ -200,7 +202,7 @@ public abstract class AnilistDataService implements DataService {
 				""";
 		HttpGraphQlClient.create(WebClient.create(ANILIST_API_URL))
 				.mutate()
-				.header("Authorization", user.getConnections().get(ThirdPartyService.ANILIST).getAccessToken())
+				.header("Authorization", user.getConnections().get(MediaSource.ANILIST).getAccessToken())
 				.build()
 				.document(anilistUpdateQuery)
 				.variable("mediaId", id)

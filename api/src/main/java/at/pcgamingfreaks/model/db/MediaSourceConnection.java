@@ -1,7 +1,7 @@
 package at.pcgamingfreaks.model.db;
 
-import at.pcgamingfreaks.model.ContentType;
-import at.pcgamingfreaks.model.ThirdPartyService;
+import at.pcgamingfreaks.model.enums.MediaType;
+import at.pcgamingfreaks.model.enums.MediaSource;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -34,7 +34,7 @@ public class MediaSourceConnection {
 	@NotBlank
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
-	private ThirdPartyService service;
+	private MediaSource source;
 
 	@NotBlank
 	@Column(nullable = false)
@@ -51,7 +51,7 @@ public class MediaSourceConnection {
 
 	@OneToMany(mappedBy = "connection", orphanRemoval = true)
 	@MapKey(name = "type")
-	Map<ContentType, MediaTypeSettings> mediaTypeSettings;
+	Map<MediaType, MediaTypeSettings> mediaTypeSettings;
 
 	public void putMediaTypeSettings(MediaTypeSettings settings) {
 		if (settings.getType() == null) throw new IllegalStateException("Type is required for MediaTypeSettings");
