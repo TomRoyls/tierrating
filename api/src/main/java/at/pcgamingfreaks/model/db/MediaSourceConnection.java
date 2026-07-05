@@ -11,7 +11,6 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -25,8 +24,9 @@ import java.util.UUID;
 public class MediaSourceConnection {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
-	private UUID id;
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "media_source_connections_seq")
+	@SequenceGenerator(name = "media_source_connections_seq", allocationSize = 50)
+	private Long id;
 
 	@NotNull
 	@ManyToOne(optional = false, fetch = FetchType.EAGER)

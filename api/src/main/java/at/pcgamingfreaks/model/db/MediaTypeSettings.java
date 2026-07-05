@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -17,8 +16,9 @@ import java.util.UUID;
 public class MediaTypeSettings {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
-	private UUID id;
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "media_type_settings_seq")
+	@SequenceGenerator(name = "media_type_settings_seq", allocationSize = 50)
+	private Long id;
 
 	@ManyToOne
 	@JoinColumn(name = "connection_id")
