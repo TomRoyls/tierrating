@@ -1,7 +1,7 @@
 package at.pcgamingfreaks.model.auth;
 
 import at.pcgamingfreaks.model.ThirdPartyService;
-import at.pcgamingfreaks.model.TierList;
+import at.pcgamingfreaks.model.db.Tierlist;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -49,7 +49,7 @@ public class User implements UserDetails {
 	private Map<ThirdPartyService, ThirdPartyConnection> connections;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
-	private List<TierList> tierlists;
+	private List<Tierlist> tierlists;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

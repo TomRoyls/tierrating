@@ -1,14 +1,13 @@
 package at.pcgamingfreaks.controller;
 
 import at.pcgamingfreaks.model.ContentType;
-import at.pcgamingfreaks.model.Tier;
-import at.pcgamingfreaks.model.TierList;
+import at.pcgamingfreaks.model.db.Tier;
+import at.pcgamingfreaks.model.db.Tierlist;
 import at.pcgamingfreaks.model.auth.ThirdPartyConnection;
 import at.pcgamingfreaks.model.auth.User;
 import at.pcgamingfreaks.model.dto.TierDTO;
 import at.pcgamingfreaks.model.exceptions.ThirdPartyUnconfiguredException;
 import at.pcgamingfreaks.model.repo.TierListsRepository;
-import at.pcgamingfreaks.model.repo.TiersRepository;
 import at.pcgamingfreaks.model.repo.UserRepository;
 import at.pcgamingfreaks.service.TiersService;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,8 +36,7 @@ class TiersControllerTest {
 	private UserRepository userRepository;
 	@Mock
 	private TierListsRepository tierListsRepository;
-	@Mock
-	private TiersRepository tiersRepository;
+
 
 	@InjectMocks
 	private TiersService tiersService;
@@ -64,36 +62,36 @@ class TiersControllerTest {
 						List.of(),
 						List.of(new TierDTO(UUID.randomUUID(), "#111111", "testing 1", 10, 10),
 								new TierDTO(UUID.randomUUID(), "#222222", "testing 2", 8, 8)),
-						List.of(new Tier(UUID.randomUUID(), "#111111", "testing 1", 10, 10),
-								new Tier(UUID.randomUUID(), "#222222", "testing 2", 8, 8)),
+						List.of(new Tier("#111111", "testing 1", 10, 10),
+								new Tier("#222222", "testing 2", 8, 8)),
 						List.of()
 				),
 				Arguments.of(
-						List.of(new Tier(UUID.randomUUID(), "#666666", "testing 6", 10, 10),
-								new Tier(UUID.randomUUID(), "#777777", "testing 7", 7, 7),
-								new Tier(UUID.randomUUID(), "#888888", "testing 8", 4, 4),
-								new Tier(UUID.randomUUID(), "#999999", "testing 9", 1, 1)),
+						List.of(new Tier("#666666", "testing 6", 10, 10),
+								new Tier("#777777", "testing 7", 7, 7),
+								new Tier("#888888", "testing 8", 4, 4),
+								new Tier("#999999", "testing 9", 1, 1)),
 						List.of(new TierDTO(UUID.randomUUID(), "#111111", "testing 1", 10, 10),
 								new TierDTO(UUID.randomUUID(), "#222222", "testing 2", 8, 8),
 								new TierDTO(UUID.randomUUID(), "#333333", "testing 3", 6, 6),
 								new TierDTO(UUID.randomUUID(), "#444444", "testing 4", 4, 4)),
-						List.of(new Tier(UUID.randomUUID(), "#111111", "testing 1", 10, 10),
-								new Tier(UUID.randomUUID(), "#222222", "testing 2", 8, 8),
-								new Tier(UUID.randomUUID(), "#333333", "testing 3", 6, 6),
-								new Tier(UUID.randomUUID(), "#444444", "testing 4", 4, 4)),
-						List.of(new Tier(UUID.randomUUID(), "#666666", "testing 6", 10, 10),
-								new Tier(UUID.randomUUID(), "#777777", "testing 7", 7, 7),
-								new Tier(UUID.randomUUID(), "#888888", "testing 8", 4, 4),
-								new Tier(UUID.randomUUID(), "#999999", "testing 9", 1, 1))
+						List.of(new Tier("#111111", "testing 1", 10, 10),
+								new Tier("#222222", "testing 2", 8, 8),
+								new Tier("#333333", "testing 3", 6, 6),
+								new Tier("#444444", "testing 4", 4, 4)),
+						List.of(new Tier("#666666", "testing 6", 10, 10),
+								new Tier("#777777", "testing 7", 7, 7),
+								new Tier("#888888", "testing 8", 4, 4),
+								new Tier("#999999", "testing 9", 1, 1))
 				),
 				Arguments.of(
-						List.of(new Tier(UUID.fromString("da2e6e6e-9fc8-4201-bb99-2d0416c939d9"), "#666666", "testing 6", 10, 10),
-								new Tier(UUID.fromString("ca7d3900-3eea-4619-89b2-a2fec2f99a11"), "#777777", "testing 7", 7, 7)),
+						List.of(new Tier("#666666", "testing 6", 10, 10),
+								new Tier("#777777", "testing 7", 7, 7)),
 						List.of(new TierDTO(UUID.fromString("da2e6e6e-9fc8-4201-bb99-2d0416c939d9"), "#666789", "testing 6789", 10, 10),
 								new TierDTO(UUID.fromString("6bf9f692-07bb-485e-9d73-1ee6fe364fba"), "#888888", "testing 8", 8, 8)),
-						List.of(new Tier(UUID.fromString("da2e6e6e-9fc8-4201-bb99-2d0416c939d9"), "#666789", "testing 6789", 10, 10),
-								new Tier(UUID.fromString("6bf9f692-07bb-485e-9d73-1ee6fe364fba"), "#888888", "testing 8", 8, 8)),
-						List.of(new Tier(UUID.fromString("ca7d3900-3eea-4619-89b2-a2fec2f99a11"), "#777777", "testing 7", 7, 7))
+						List.of(new Tier("#666789", "testing 6789", 10, 10),
+								new Tier("#888888", "testing 8", 8, 8)),
+						List.of(new Tier("#777777", "testing 7", 7, 7))
 				)
 		);
 	}
@@ -107,13 +105,13 @@ class TiersControllerTest {
 		when(userRepository.findByUsername(any())).thenReturn(Optional.of(user));
 
 		List<Tier> existingTiers = new ArrayList<>(immutableExistingTiers);
-		TierList tierList = new TierList();
+		Tierlist tierList = new Tierlist();
 		tierList.setUser(user);
 		tierList.setTiers(existingTiers);
 		when(tierListsRepository.findByUserAndServiceAndType(any(), any(), any())).thenReturn(!immutableExistingTiers.isEmpty() ? Optional.of(tierList) : Optional.empty());
 		when(tierListsRepository.save(any())).thenReturn(null);
 
-		ArgumentCaptor<TierList> tierListCaptor = ArgumentCaptor.forClass(TierList.class);
+		ArgumentCaptor<Tierlist> tierListCaptor = ArgumentCaptor.forClass(Tierlist.class);
 		ArgumentCaptor<List<Tier>> tiersCaptor = ArgumentCaptor.forClass(List.class);
 
 		tiersService.updateTierlist("test", ANILIST, ContentType.ANIME, changedTiers);
@@ -121,7 +119,6 @@ class TiersControllerTest {
 		verify(tierListsRepository, times(1)).save(tierListCaptor.capture());
 
 		if (!immutableExistingTiers.isEmpty()) { // without existing tierlist no deletion will occur
-			verify(tiersRepository, times(1)).deleteAll(tiersCaptor.capture());
 			List<Tier> removedTiers = tiersCaptor.getValue();
 			assertEquals(expectedRemovedTiers.size(), removedTiers.size());
 			for (int i = 0; i < removedTiers.size(); i++) {
@@ -132,7 +129,7 @@ class TiersControllerTest {
 			}
 		}
 
-		TierList capturedTierlist = tierListCaptor.getValue();
+		Tierlist capturedTierlist = tierListCaptor.getValue();
 		assertEquals(user, capturedTierlist.getUser());
 		assertEquals(expectedTiers.size(), capturedTierlist.getTiers().size());
 		for (int i = 0; i < capturedTierlist.getTiers().size(); i++) {
