@@ -10,7 +10,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class UserDTO {
-	private UUID id;
+	private Long id;
 
 	private String username;
 	private String bio;

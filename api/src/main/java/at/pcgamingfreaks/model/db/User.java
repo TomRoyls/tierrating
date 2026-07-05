@@ -1,8 +1,9 @@
-package at.pcgamingfreaks.model.auth;
+package at.pcgamingfreaks.model.db;
 
 import at.pcgamingfreaks.model.ThirdPartyService;
-import at.pcgamingfreaks.model.db.Tierlist;
+import at.pcgamingfreaks.model.auth.ThirdPartyConnection;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -21,34 +22,41 @@ import java.util.UUID;
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
-	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
-	private UUID id;
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_seq")
+	@SequenceGenerator(name = "users_seq", allocationSize = 50)
+	private Long id;
+
+	@NotNull
 	@Column(unique = true, nullable = false)
 	private String username;
 
+	@NotNull
 	@Column(unique = true, nullable = false)
 	private String email;
 
+	@NotNull
 	@Column(nullable = false)
 	private String password;
 
+	@NotNull
 	@CreationTimestamp
 	@Column(nullable = false)
 	private LocalDateTime createdAt;
 
+	@NotNull
 	@UpdateTimestamp
 	@Column(nullable = false)
 	private LocalDateTime updatedAt;
 
 	private String bio;
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER, mappedBy = "user")
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "user")
 	@MapKey(name = "service")
 	private Map<ThirdPartyService, ThirdPartyConnection> connections;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
 	private List<Tierlist> tierlists;
 
 	@Override

@@ -1,7 +1,7 @@
 package at.pcgamingfreaks.model.repo;
 
 import at.pcgamingfreaks.model.ContentType;
-import at.pcgamingfreaks.model.auth.User;
+import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.thirdparty.trakt.TraktEntryScore;
 import org.springframework.data.repository.CrudRepository;
 

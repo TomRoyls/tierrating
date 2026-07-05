@@ -1,6 +1,6 @@
 package at.pcgamingfreaks.model;
 
-import at.pcgamingfreaks.model.auth.User;
+import at.pcgamingfreaks.model.db.User;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
 

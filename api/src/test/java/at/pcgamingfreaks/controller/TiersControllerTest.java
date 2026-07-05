@@ -4,7 +4,7 @@ import at.pcgamingfreaks.model.ContentType;
 import at.pcgamingfreaks.model.db.Tier;
 import at.pcgamingfreaks.model.db.Tierlist;
 import at.pcgamingfreaks.model.auth.ThirdPartyConnection;
-import at.pcgamingfreaks.model.auth.User;
+import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.dto.TierDTO;
 import at.pcgamingfreaks.model.exceptions.ThirdPartyUnconfiguredException;
 import at.pcgamingfreaks.model.repo.TierListsRepository;

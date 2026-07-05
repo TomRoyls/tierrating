@@ -1,7 +1,7 @@
 package at.pcgamingfreaks.service.tokenfreshing;
 
 import at.pcgamingfreaks.model.ThirdPartyService;
-import at.pcgamingfreaks.model.auth.User;
+import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

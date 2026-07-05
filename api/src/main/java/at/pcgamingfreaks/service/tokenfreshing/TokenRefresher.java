@@ -1,6 +1,6 @@
 package at.pcgamingfreaks.service.tokenfreshing;
 
-import at.pcgamingfreaks.model.auth.User;
+import at.pcgamingfreaks.model.db.User;
 
 public interface TokenRefresher {
 	boolean isValid();

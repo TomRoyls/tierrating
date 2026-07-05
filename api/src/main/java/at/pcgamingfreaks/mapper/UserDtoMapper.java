@@ -1,6 +1,6 @@
 package at.pcgamingfreaks.mapper;
 
-import at.pcgamingfreaks.model.auth.User;
+import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.dto.UserDTO;
 
 

@@ -3,7 +3,6 @@ package at.pcgamingfreaks.model.db;
 import at.pcgamingfreaks.model.ContentType;
 import at.pcgamingfreaks.model.SyncStatus;
 import at.pcgamingfreaks.model.ThirdPartyService;
-import at.pcgamingfreaks.model.auth.User;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

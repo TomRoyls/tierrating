@@ -2,7 +2,7 @@ package at.pcgamingfreaks.controller;
 
 import at.pcgamingfreaks.mapper.UserDtoMapper;
 import at.pcgamingfreaks.model.ThirdPartyService;
-import at.pcgamingfreaks.model.auth.User;
+import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.dto.UserDTO;
 import at.pcgamingfreaks.model.repo.ThirdPartyConnectionRepository;
 import at.pcgamingfreaks.model.repo.UserRepository;

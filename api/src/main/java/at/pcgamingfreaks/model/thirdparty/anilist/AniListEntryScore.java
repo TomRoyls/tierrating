@@ -1,6 +1,6 @@
 package at.pcgamingfreaks.model.thirdparty.anilist;
 
-import at.pcgamingfreaks.model.auth.User;
+import at.pcgamingfreaks.model.db.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

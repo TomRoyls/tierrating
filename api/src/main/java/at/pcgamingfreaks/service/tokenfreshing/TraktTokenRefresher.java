@@ -3,7 +3,7 @@ package at.pcgamingfreaks.service.tokenfreshing;
 import at.pcgamingfreaks.config.ThirdPartyConfig;
 import at.pcgamingfreaks.model.ThirdPartyService;
 import at.pcgamingfreaks.model.auth.ThirdPartyConnection;
-import at.pcgamingfreaks.model.auth.User;
+import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.exceptions.ThirdPartyAuthenticationException;
 import at.pcgamingfreaks.model.repo.UserRepository;
 import com.uwetrottmann.trakt5.TraktV2;

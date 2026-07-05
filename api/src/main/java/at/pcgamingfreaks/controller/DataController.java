@@ -2,7 +2,7 @@ package at.pcgamingfreaks.controller;
 
 import at.pcgamingfreaks.model.ContentType;
 import at.pcgamingfreaks.model.ThirdPartyService;
-import at.pcgamingfreaks.model.auth.User;
+import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.dto.ListEntryDTO;
 import at.pcgamingfreaks.model.dto.UpdateScoreRequestDTO;
 import at.pcgamingfreaks.model.exceptions.ThirdPartyUnconfiguredException;

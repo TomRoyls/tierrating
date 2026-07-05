@@ -1,6 +1,7 @@
 package at.pcgamingfreaks.model.auth;
 
 import at.pcgamingfreaks.model.ThirdPartyService;
+import at.pcgamingfreaks.model.db.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

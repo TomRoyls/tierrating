@@ -4,7 +4,7 @@ import at.pcgamingfreaks.config.ThirdPartyConfig;
 import at.pcgamingfreaks.mapper.ListEntryDtoMapper;
 import at.pcgamingfreaks.model.ContentType;
 import at.pcgamingfreaks.model.ThirdPartyService;
-import at.pcgamingfreaks.model.auth.User;
+import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.exceptions.ThirdPartySyncException;
 import at.pcgamingfreaks.model.repo.TraktEntryRepository;
 import at.pcgamingfreaks.model.repo.TraktEntryScoreRepository;

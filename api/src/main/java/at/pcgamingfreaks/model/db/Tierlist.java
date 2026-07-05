@@ -2,7 +2,6 @@ package at.pcgamingfreaks.model.db;
 
 import at.pcgamingfreaks.model.ContentType;
 import at.pcgamingfreaks.model.ThirdPartyService;
-import at.pcgamingfreaks.model.auth.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -25,8 +24,8 @@ import java.util.List;
 public class Tierlist {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "media_type_settings_seq")
-	@SequenceGenerator(name = "media_type_settings_seq", allocationSize = 50)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tierlists_seq")
+	@SequenceGenerator(name = "tierlists_seq", allocationSize = 50)
 	private Long id;
 
 	@NotNull

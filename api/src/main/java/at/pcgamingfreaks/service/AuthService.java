@@ -1,6 +1,6 @@
 package at.pcgamingfreaks.service;
 
-import at.pcgamingfreaks.model.auth.User;
+import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.dto.ChangePasswordRequestDTO;
 import at.pcgamingfreaks.model.dto.LoginResponseDTO;
 import at.pcgamingfreaks.model.dto.SignupRequestDTO;
