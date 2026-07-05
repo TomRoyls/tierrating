@@ -68,3 +68,5 @@ yarn-error.log*
 
 # local data
 /data/
+/appdata/
+/temp-data/
