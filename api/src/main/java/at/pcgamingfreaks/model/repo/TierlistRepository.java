@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface TierListsRepository extends JpaRepository<Tierlist, Long> {
+public interface TierlistRepository extends JpaRepository<Tierlist, Long> {
 
 	Optional<Tierlist> findByUserAndServiceAndType(User user, MediaSource service, MediaType type);
 }

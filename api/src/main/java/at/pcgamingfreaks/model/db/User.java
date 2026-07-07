@@ -11,9 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 @Setter
@@ -52,10 +50,14 @@ public class User implements UserDetails {
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "user")
 	@MapKey(name = "source")
-	private Map<MediaSource, MediaSourceConnection> connections;
+	private Map<MediaSource, MediaSourceConnection> connections = new HashMap<>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
-	private List<Tierlist> tierlists;
+	private List<Tierlist> tierlists = new ArrayList<>(); // TODO: shouldn't this be a set?
+
+	public boolean hasMediaSourceConnection(MediaSource source) {
+		return connections.containsKey(source) && connections.get(source) != null;
+	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

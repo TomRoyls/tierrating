@@ -7,7 +7,7 @@ import { ArrowUpDown, Settings } from "lucide-react";
 import { Tier } from "@/types/types";
 import { useAuth } from "@/contexts/auth-context";
 import { getDefaultTiers } from "@/lib/config/default-tiers";
-import { useTiersOnDemand, useTiersUpdate } from "@/lib/services/tiers-service";
+import { useTiersOnDemand, useTiersUpdate } from "@/lib/services/tierlist-service";
 import { toast } from "sonner";
 import { TierConfigModalBody } from "@/app/settings/_components/tier-config-modal-body";
 

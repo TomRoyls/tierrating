@@ -16,11 +16,11 @@ import java.util.Objects;
 @Embeddable
 public class Tier {
 
-	private String color;
-
 	@NotNull
 	@Column(nullable = false)
 	private String name;
+
+	private String color;
 
 	@NotNull
 	@Column(nullable = false)
@@ -29,7 +29,6 @@ public class Tier {
 	@NotNull
 	@Column(nullable = false)
 	private double adjustedScore;
-
 
 	@Override
 	public boolean equals(Object o) {

@@ -4,7 +4,7 @@ import at.pcgamingfreaks.model.enums.MediaType;
 import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.dto.TierDTO;
 import at.pcgamingfreaks.model.dto.TiersUpdateRequest;
-import at.pcgamingfreaks.service.TiersService;
+import at.pcgamingfreaks.service.TierlistService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -15,23 +15,23 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("tiers")
+@RequestMapping("tierlist")
 @RequiredArgsConstructor
-public class TiersController {
-	private final TiersService tiersService;
+public class TierlistController {
+	private final TierlistService tierlistService;
 
 	/**
 	 * @return list of tier grades sorted by score
 	 */
 	@GetMapping("{username}/{service}/{type}")
 	public ResponseEntity<List<TierDTO>> getTierlist(@PathVariable String username, @PathVariable MediaSource service, @PathVariable MediaType type) {
-		return ResponseEntity.ok(tiersService.getTierlist(username, service, type));
+		return ResponseEntity.ok(tierlistService.getTierlist(username, service, type));
 	}
 
-	@PostMapping("{username}/{service}/{type}")
+	@PutMapping("{username}/{service}/{type}")
 	@PreAuthorize("authentication.principal.username == #username")
 	public void setTierlist(@PathVariable String username, @PathVariable MediaSource service,
 	                        @PathVariable MediaType type, @RequestBody TiersUpdateRequest request) {
-		tiersService.updateTierlist(username, service, type, request.getTiers());
+		tierlistService.updateTierlist(username, service, type, request.getTiers());
 	}
 }

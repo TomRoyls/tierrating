@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Comparator;
 import java.util.List;
 
-import static at.pcgamingfreaks.model.enums.MediaSource.hasUserConnection;
-
 @Slf4j
 @RestController
 @RequestMapping("data")
@@ -54,31 +52,31 @@ public class DataController {
 	 *
 	 * @param request
 	 */
-	@PostMapping("update/{username}/{service}/{type}")
+	@PostMapping("update/{username}/{source}/{type}")
 	@PreAuthorize("authentication.principal.username == #username")
 	public void update(@PathVariable String username,
-					   @PathVariable MediaSource service,
+					   @PathVariable MediaSource source,
 					   @PathVariable MediaType type,
 					   @RequestBody UpdateScoreRequestDTO request) {
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
-		if (!hasUserConnection(user, service))
-			throw new ThirdPartyUnconfiguredException(service);
-		dataFactory.getProvider(service, type).update(request.getId(), request.getScore(), user);
+		if (!user.hasMediaSourceConnection(source))
+			throw new ThirdPartyUnconfiguredException(source);
+		dataFactory.getProvider(source, type).update(request.getId(), request.getScore(), user);
 	}
 
 	/**
 	 * Pull data from third-party service for user and type. Overwriting existing scores.
 	 *
 	 * @param username
-	 * @param service
+	 * @param source
 	 * @param type
 	 */
-	@PostMapping("pull/{username}/{service}/{type}")
+	@PostMapping("pull/{username}/{source}/{type}")
 	@PreAuthorize("authentication.principal.username == #username")
-	public void pull(@PathVariable String username, @PathVariable MediaSource service, @PathVariable MediaType type) {
+	public void pull(@PathVariable String username, @PathVariable MediaSource source, @PathVariable MediaType type) {
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
-		if (!hasUserConnection(user, service)) throw new ThirdPartyUnconfiguredException(service);
-		dataFactory.getProvider(service, type).pull(username);
+		if (!user.hasMediaSourceConnection(source)) throw new ThirdPartyUnconfiguredException(source);
+		dataFactory.getProvider(source, type).pull(username);
 	}
 
 	/**

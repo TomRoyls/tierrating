@@ -8,7 +8,7 @@ import { DragDropProvider, DragOverlay } from "@dnd-kit/react";
 import { assignTiersAndGroupEntriesByTier, groupBySingle, sortByName } from "@/lib/mapper/tier-mapper";
 import TierContainerDroppable from "@/app/user/[username]/[service]/[type]/_components/tier-container-droppable";
 import { toast } from "sonner";
-import { useTiers } from "@/lib/services/tiers-service";
+import { useTiers } from "@/lib/services/tierlist-service";
 import { useScoreMutation, useTierlistEntries } from "@/lib/services/data-service";
 import { useAuth } from "@/contexts/auth-context";
 import { getDefaultTiers } from "@/lib/config/default-tiers";
