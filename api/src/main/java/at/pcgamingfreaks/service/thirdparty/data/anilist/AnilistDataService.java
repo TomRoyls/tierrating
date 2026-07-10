@@ -132,7 +132,7 @@ public abstract class AnilistDataService implements DataService {
 		List<AniListEntryScore> scoresToSave = new ArrayList<>();
 
 		for (AniListListEntry queryResult : anilistQueryResult) {
-			log.info("{} - {}", queryResult.getMedia().getTitle().getEnglish(), queryResult.getScore());
+//			log.info("{} - {}", queryResult.getMedia().getTitle().getEnglish(), queryResult.getScore());
 			long mediaId = queryResult.getMedia().getId();
 			AniListMediaTitle title = queryResult.getMedia().getTitle();
 			AniListMediaCoverImage cover = queryResult.getMedia().getCoverImage();

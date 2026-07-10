@@ -17,7 +17,7 @@ import java.util.Map;
 @Table(
 		name = "media_source_connections",
 		uniqueConstraints = {
-				@UniqueConstraint(columnNames = {"third_party_user_id", "service"})
+				@UniqueConstraint(columnNames = {"third_party_user_id", "source"})
 		}
 )
 public class MediaSourceConnection {
@@ -31,7 +31,7 @@ public class MediaSourceConnection {
 	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	private User user;
 
-	@NotBlank
+	@NotNull
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private MediaSource source;

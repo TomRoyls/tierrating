@@ -27,14 +27,17 @@ public class SyncJob {
 	private User user;
 
 	@NotNull
+	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private MediaSource mediaSource;
 
 	@NotNull
+	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private MediaType mediaType;
 
 	@NotNull
+	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private SyncStatus status;
 

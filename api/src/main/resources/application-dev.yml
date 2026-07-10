@@ -23,6 +23,10 @@ server:
   servlet:
     context-path: "/api"
 
+logging:
+  level:
+    at.pcgamingfreaks: debug
+
 sync:
   interval: "0 0 */4 * * *"
 
