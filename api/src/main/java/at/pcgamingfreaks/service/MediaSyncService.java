@@ -23,19 +23,14 @@ public class MediaSyncService {
 	public SyncStatusDTO status(String username, MediaSource source, MediaType type) {
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
 		Optional<SyncJob> job = syncManager.getStatus(user, source, type);
-		return new SyncStatusDTO();
+		// TODO: how should the response look when there is no running sync?
+		return job.map(syncJob -> new SyncStatusDTO(syncJob.getMediaSource(), syncJob.getMediaType(), syncJob.getStatus(), syncJob.getStartedAt()))
+				.orElseGet(SyncStatusDTO::new);
 	}
 
 	@Transactional
-	public SyncStatusDTO status(String username) {
+	public void enqueue(String username, MediaSource source, MediaType type) {
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
-		user.getConnections(); // TODO: check for all configured sources
-		return new SyncStatusDTO();
-	}
-
-	@Transactional
-	public Long enqueue(String username, MediaSource source, MediaType type) {
-		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
-		return syncManager.enqueueSync(user, source, type);
+		syncManager.enqueueSync(user, source, type);
 	}
 }

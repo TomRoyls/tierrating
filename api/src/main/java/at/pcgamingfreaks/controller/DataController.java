@@ -65,21 +65,6 @@ public class DataController {
 	}
 
 	/**
-	 * Pull data from third-party service for user and type. Overwriting existing scores.
-	 *
-	 * @param username
-	 * @param source
-	 * @param type
-	 */
-	@PostMapping("pull/{username}/{source}/{type}")
-	@PreAuthorize("authentication.principal.username == #username")
-	public void pull(@PathVariable String username, @PathVariable MediaSource source, @PathVariable MediaType type) {
-		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
-		if (!user.hasMediaSourceConnection(source)) throw new ThirdPartyUnconfiguredException(source);
-		dataFactory.getProvider(source, type).pull(username);
-	}
-
-	/**
 	 * Push score changes for user and type to third-party service.
 	 *
 	 * @param username

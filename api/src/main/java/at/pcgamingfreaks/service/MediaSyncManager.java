@@ -33,7 +33,7 @@ public class MediaSyncManager {
 	// TODO: restart pending and in_progress jobs
 
 	@Transactional
-	public Long enqueueSync(User user, MediaSource source, MediaType type) {
+	public void enqueueSync(User user, MediaSource source, MediaType type) {
 		Optional<SyncJob> runningJob = syncJobRepository.findActiveSyncByUserAndSourceAndTypeAndStatus(user, source, type, List.of(IN_PROGRESS, PENDING));
 		if (runningJob.isPresent()) {
 			log.debug("Tried to enqueue sync for {} {} {}, but sync already queued or in progress", user.getUsername(), source, type);
@@ -52,17 +52,9 @@ public class MediaSyncManager {
 
 		executor.submit(new MediaSyncJob(job, dataFactory.getProvider(source, type), syncJobRepository));
 		log.debug("Submitted sync job (id: {}) for {} {} {}", job.getId(), user.getUsername(), source, type);
-
-		return job.getId();
 	}
 
 	public Optional<SyncJob> getStatus(User user, MediaSource source, MediaType type) {
-		Optional<SyncJob> syncJob = syncJobRepository.findByUserAndMediaSourceAndMediaTypeOrderByStartedAtDesc(user, source, type);
-
-		if (syncJob.isEmpty() || COMPLETED.equals(syncJob.get().getStatus())) {
-			return Optional.empty();
-		}
-
-		return syncJob;
+		return syncJobRepository.findFirstByUserAndMediaSourceAndMediaTypeAndStatusIn(user, source, type, List.of(IN_PROGRESS, PENDING));
 	}
 }

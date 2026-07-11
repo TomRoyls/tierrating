@@ -20,7 +20,7 @@ public interface SyncJobRepository extends JpaRepository<SyncJob, Long> {
 	@Query("select job from SyncJob job where job.user = ?1 and job.mediaSource = ?2 and job.mediaType = ?3 and job.status in ?4")
 	Optional<SyncJob> findActiveSyncByUserAndSourceAndTypeAndStatus(User user, MediaSource source, MediaType type, List<SyncStatus> statuses);
 
-	Optional<SyncJob> findByUserAndMediaSourceAndMediaTypeOrderByStartedAtDesc(User user, MediaSource source, MediaType type);
+	Optional<SyncJob> findFirstByUserAndMediaSourceAndMediaTypeAndStatusIn(User user, MediaSource source, MediaType type, List<SyncStatus> status);
 
 	@Transactional
 	@Modifying

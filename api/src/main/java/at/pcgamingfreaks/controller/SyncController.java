@@ -20,17 +20,13 @@ public class SyncController {
 
 	@GetMapping("status/{username}/{source}/{type}")
 	public ResponseEntity<SyncStatusDTO> status(@PathVariable String username, @PathVariable MediaSource source, @PathVariable MediaType type) {
-		return ResponseEntity.ok(new SyncStatusDTO());
-	}
-
-	@GetMapping("status/{username}")
-	public ResponseEntity<SyncStatusDTO> status(@PathVariable String username) {
-		return ResponseEntity.ok(new SyncStatusDTO());
+		return ResponseEntity.ok(mediaSyncService.status(username, source, type));
 	}
 
 	@PostMapping("{username}/{source}/{type}")
 	@PreAuthorize("authentication.principal.username == #username")
 	public ResponseEntity<?> enqueue(@PathVariable String username, @PathVariable MediaSource source, @PathVariable MediaType type) {
-		return ResponseEntity.status(202).body(mediaSyncService.enqueue(username, source, type));
+		mediaSyncService.enqueue(username, source, type);
+		return ResponseEntity.status(202).build();
 	}
 }
