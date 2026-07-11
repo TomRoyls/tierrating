@@ -4,7 +4,7 @@ import at.pcgamingfreaks.config.ThirdPartyConfig;
 import at.pcgamingfreaks.config.ThirdPartyServiceConfig;
 import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.dto.ThirdPartyInfoResponseDTO;
-import at.pcgamingfreaks.service.thirdparty.info.ThirdPartyInfoFactory;
+import at.pcgamingfreaks.service.info.ThirdPartyInfoFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

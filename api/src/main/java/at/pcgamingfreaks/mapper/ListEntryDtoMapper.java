@@ -1,8 +1,8 @@
 package at.pcgamingfreaks.mapper;
 
 import at.pcgamingfreaks.model.dto.ListEntryDTO;
-import at.pcgamingfreaks.model.thirdparty.anilist.AniListEntryScore;
-import at.pcgamingfreaks.model.thirdparty.trakt.TraktEntryScore;
+import at.pcgamingfreaks.model.db.media.AniListEntryScore;
+import at.pcgamingfreaks.model.db.media.TraktEntryScore;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;

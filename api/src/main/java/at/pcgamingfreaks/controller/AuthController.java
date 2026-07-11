@@ -3,7 +3,7 @@ package at.pcgamingfreaks.controller;
 import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.dto.*;
 import at.pcgamingfreaks.service.AuthService;
-import at.pcgamingfreaks.service.thirdparty.auth.ThirdPartyAuthenticatorFactory;
+import at.pcgamingfreaks.service.auth.ThirdPartyAuthenticatorFactory;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

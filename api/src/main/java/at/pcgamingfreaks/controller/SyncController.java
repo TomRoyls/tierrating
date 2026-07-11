@@ -3,7 +3,7 @@ package at.pcgamingfreaks.controller;
 import at.pcgamingfreaks.model.dto.sync.SyncStatusDTO;
 import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.enums.MediaType;
-import at.pcgamingfreaks.service.MediaSyncService;
+import at.pcgamingfreaks.service.sync.MediaSyncService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

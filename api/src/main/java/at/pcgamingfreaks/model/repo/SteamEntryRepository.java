@@ -1,6 +1,6 @@
 package at.pcgamingfreaks.model.repo;
 
-import at.pcgamingfreaks.model.thirdparty.steam.SteamEntry;
+import at.pcgamingfreaks.model.db.media.SteamEntry;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Collection;

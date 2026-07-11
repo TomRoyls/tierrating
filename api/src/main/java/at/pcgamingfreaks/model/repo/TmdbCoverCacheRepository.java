@@ -1,6 +1,6 @@
 package at.pcgamingfreaks.model.repo;
 
-import at.pcgamingfreaks.model.thirdparty.TmdbCoverCache;
+import at.pcgamingfreaks.model.db.TmdbCoverCache;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -4,7 +4,7 @@ import at.pcgamingfreaks.config.ThirdPartyConfig;
 import at.pcgamingfreaks.model.dto.TmdbInfoRequest;
 import at.pcgamingfreaks.model.exceptions.ThirdPartyUnconfiguredException;
 import at.pcgamingfreaks.model.repo.TmdbCoverCacheRepository;
-import at.pcgamingfreaks.model.thirdparty.TmdbCoverCache;
+import at.pcgamingfreaks.model.db.TmdbCoverCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;

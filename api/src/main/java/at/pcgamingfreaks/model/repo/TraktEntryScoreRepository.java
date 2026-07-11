@@ -2,7 +2,7 @@ package at.pcgamingfreaks.model.repo;
 
 import at.pcgamingfreaks.model.enums.MediaType;
 import at.pcgamingfreaks.model.db.User;
-import at.pcgamingfreaks.model.thirdparty.trakt.TraktEntryScore;
+import at.pcgamingfreaks.model.db.media.TraktEntryScore;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.*;
