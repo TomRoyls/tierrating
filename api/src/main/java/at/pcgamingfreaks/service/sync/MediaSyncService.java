@@ -1,5 +1,6 @@
 package at.pcgamingfreaks.service.sync;
 
+import at.pcgamingfreaks.model.UserPrincipal;
 import at.pcgamingfreaks.model.db.SyncJob;
 import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.dto.sync.SyncStatusDTO;
@@ -29,8 +30,8 @@ public class MediaSyncService {
 	}
 
 	@Transactional
-	public void enqueue(String username, MediaSource source, MediaType type) {
-		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
+	public void enqueue(UserPrincipal userPrincipal, MediaSource source, MediaType type) {
+		User user = userRepository.findById(userPrincipal.getId()).orElseThrow(() -> new UsernameNotFoundException(userPrincipal.getUsername()));
 		syncManager.enqueueSync(user, source, type);
 	}
 }

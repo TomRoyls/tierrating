@@ -1,9 +1,11 @@
 package at.pcgamingfreaks.service;
 
+import at.pcgamingfreaks.model.UserPrincipal;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -22,27 +24,30 @@ public class JwtService {
 		this.expirationMinutes = expirationMinutes;
 	}
 
-	public String create(String username) {
+	public String generateToken(UserPrincipal user) {
 		return JWT.create()
-				.withSubject(username)
+				.withSubject(user.getUsername())
+				.withClaim("user_id", user.getId())
 				.withIssuedAt(Date.from(Instant.now()))
 				.withExpiresAt(Date.from(Instant.now().plus(expirationMinutes, ChronoUnit.MINUTES)))
 				.sign(algorithm);
 	}
 
-	public String extractUsername(String token) {
-		return JWT.decode(token).getSubject();
+	public UserPrincipal extractPrincipal(String token) {
+		DecodedJWT jwt = JWT.decode(token);
+		Long id = jwt.getClaim("user_id").asLong();
+		String username = jwt.getSubject();
+//		String role = jwt.getClaim("role").asString().replace("ROLE_", "");
+
+		return new UserPrincipal(id, username);
 	}
 
-	public Date extractExpiration(String token) {
-		return JWT.decode(token).getExpiresAt();
-	}
-
-	public boolean isTokenExpired(String token) {
-		return extractExpiration(token).before(new Date());
-	}
-
-	public boolean valid(String token, UserDetails user) {
-		return user.getUsername().equals(extractUsername(token)) && !isTokenExpired(token);
+	public boolean isTokenValid(String token) {
+		try {
+			JWT.require(algorithm).build().verify(token);
+			return true;
+		} catch (JWTVerificationException e) {
+			return false;
+		}
 	}
 }

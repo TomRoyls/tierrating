@@ -1,5 +1,6 @@
 package at.pcgamingfreaks.service;
 
+import at.pcgamingfreaks.model.UserPrincipal;
 import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.dto.ChangePasswordRequestDTO;
 import at.pcgamingfreaks.model.dto.LoginResponseDTO;
@@ -11,10 +12,7 @@ import at.pcgamingfreaks.model.repo.TraktEntryScoreRepository;
 import at.pcgamingfreaks.model.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.CredentialsExpiredException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,7 +26,6 @@ import java.time.LocalDateTime;
 public class AuthService {
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
-	private final AuthenticationManager authenticationManager;
 	private final JwtService jwtService;
 
 	private final AniListEntryScoreRepository aniListEntryScoreRepository;
@@ -36,9 +33,10 @@ public class AuthService {
 	private final SteamEntryScoreRepository steamEntryScoreRepository;
 
 	public LoginResponseDTO authenticate(String username, String password) {
-		Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-		User user = (User) auth.getPrincipal();
-		String token = jwtService.create(user.getUsername());
+		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
+		if (!passwordEncoder.matches(password, user.getPassword()))
+			throw new BadCredentialsException("Invalid credentials");
+		String token = jwtService.generateToken(new UserPrincipal(user.getId(), user.getUsername()));
 		return new LoginResponseDTO(token);
 	}
 
@@ -63,13 +61,13 @@ public class AuthService {
 	}
 
 	public LoginResponseDTO refreshToken(String token) {
-		if (jwtService.isTokenExpired(token)) throw new CredentialsExpiredException("Token expired");
+		jwtService.isTokenValid(token);
 
-		String username = jwtService.extractUsername(token);
-		User user = userRepository.findByUsername(username)
-				.orElseThrow(() -> new UsernameNotFoundException(username));
+		UserPrincipal userPrincipal = jwtService.extractPrincipal(token);
+		User user = userRepository.findById(userPrincipal.getId())
+				.orElseThrow(() -> new UsernameNotFoundException(userPrincipal.getUsername()));
 
-		String refreshedToken = jwtService.create(user.getUsername());
+		String refreshedToken = jwtService.generateToken(new UserPrincipal(user.getId(), user.getUsername()));
 
 		return new LoginResponseDTO(refreshedToken);
 	}
@@ -79,7 +77,7 @@ public class AuthService {
 		User user = userRepository.findByUsername(request.getUsername())
 				.orElseThrow(() -> new UsernameNotFoundException(request.getUsername()));
 
-		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getOldPassword()));
+		if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) throw new BadCredentialsException("Invalid credentials");
 		user.setPassword(passwordEncoder.encode(request.getNewPassword()));
 		userRepository.save(user);
 	}
