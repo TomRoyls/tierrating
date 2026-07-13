@@ -11,7 +11,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "user_media_entry_states")
+@Table(name = "user_media_entry_states",
+		uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "source", "entry_id"}))
 public class UserMediaEntryState {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_media_entry_states_seq")

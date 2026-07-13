@@ -10,5 +10,5 @@ import lombok.Setter;
 @Entity
 @Table(name = "anilist_media_entries")
 public class AniListMediaEntry extends MediaEntry {
-	private String titleRomanji;
+	private String titleRomaji;
 }
