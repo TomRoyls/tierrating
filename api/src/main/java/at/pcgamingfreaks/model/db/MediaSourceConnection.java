@@ -1,7 +1,7 @@
 package at.pcgamingfreaks.model.db;
 
-import at.pcgamingfreaks.model.enums.MediaType;
 import at.pcgamingfreaks.model.enums.MediaSource;
+import at.pcgamingfreaks.model.enums.MediaType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -14,12 +14,11 @@ import java.util.Map;
 @Getter
 @Setter
 @Entity
-@Table(
-		name = "media_source_connections",
-		uniqueConstraints = {
-				@UniqueConstraint(columnNames = {"third_party_user_id", "source"})
-		}
-)
+@Table(name = "media_source_connections", indexes = {
+		@Index(name = "idx_mediasourceconnection_user_id", columnList = "user_id")
+}, uniqueConstraints = {
+		@UniqueConstraint(columnNames = {"third_party_user_id", "source"})
+})
 public class MediaSourceConnection {
 
 	@Id
@@ -28,7 +27,7 @@ public class MediaSourceConnection {
 	private Long id;
 
 	@NotNull
-	@ManyToOne(optional = false, fetch = FetchType.EAGER)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	private User user;
 
 	@NotNull
@@ -49,7 +48,7 @@ public class MediaSourceConnection {
 
 	private LocalDateTime expiresOn;
 
-	@OneToMany(mappedBy = "connection", orphanRemoval = true)
+	@OneToMany(mappedBy = "connection", orphanRemoval = true, fetch = FetchType.EAGER)
 	@MapKey(name = "type")
 	Map<MediaType, MediaTypeSettings> mediaTypeSettings;
 

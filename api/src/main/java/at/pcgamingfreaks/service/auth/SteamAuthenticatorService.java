@@ -23,7 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static at.pcgamingfreaks.model.enums.MediaType.GAMES;
+import static at.pcgamingfreaks.model.enums.MediaType.GAME;
 import static java.net.URLEncoder.encode;
 
 @Slf4j
@@ -80,7 +80,7 @@ public class SteamAuthenticatorService implements ThirdPartyOpenIdAuthenticatorS
 		connection.setThirdPartyUserId(steamId);
 
 		MediaTypeSettings settings = new MediaTypeSettings();
-		settings.setType(GAMES);
+		settings.setType(GAME);
 		settings.setAutoPush(false);
 		connection.putMediaTypeSettings(settings);
 		mediaSourceConnectionRepository.save(connection);

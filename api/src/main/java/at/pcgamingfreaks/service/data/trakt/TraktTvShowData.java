@@ -36,7 +36,7 @@ public class TraktTvShowData extends TraktDataService {
 
 	@Override
 	public MediaType getContentType() {
-		return MediaType.TVSHOWS;
+		return MediaType.TV_SHOW;
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class TraktTvShowData extends TraktDataService {
 				.map(ratedShow -> {
 					TraktEntry entry = new TraktEntry(
 							ratedShow.show.ids.trakt,
-							MediaType.TVSHOWS, null,
+							MediaType.TV_SHOW, null,
 							ratedShow.show.title,
 							coverFinder.findShow(ratedShow.show.ids.tmdb)
 					);
@@ -61,7 +61,7 @@ public class TraktTvShowData extends TraktDataService {
 				.map(baseShow -> {
 					TraktEntry entry = new TraktEntry(
 							baseShow.show.ids.trakt,
-							MediaType.TVSHOWS, null,
+							MediaType.TV_SHOW, null,
 							baseShow.show.title,
 							coverFinder.findShow(baseShow.show.ids.tmdb)
 					);

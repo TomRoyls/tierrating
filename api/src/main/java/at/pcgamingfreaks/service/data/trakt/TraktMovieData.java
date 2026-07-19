@@ -36,7 +36,7 @@ public class TraktMovieData extends TraktDataService {
 
 	@Override
 	public MediaType getContentType() {
-		return MediaType.MOVIES;
+		return MediaType.MOVIE;
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class TraktMovieData extends TraktDataService {
 				.map(ratedMovie -> {
 					TraktEntry entry = new TraktEntry(
 							ratedMovie.movie.ids.trakt,
-							MediaType.MOVIES, null,
+							MediaType.MOVIE, null,
 							ratedMovie.movie.title,
 							coverFinder.findMovie(ratedMovie.movie.ids.tmdb)
 					);
@@ -61,7 +61,7 @@ public class TraktMovieData extends TraktDataService {
 				.map(baseMovie -> {
 					TraktEntry entry = new TraktEntry(
 							baseMovie.movie.ids.trakt,
-							MediaType.MOVIES, null,
+							MediaType.MOVIE, null,
 							baseMovie.movie.title,
 							coverFinder.findMovie(baseMovie.movie.ids.tmdb)
 					);

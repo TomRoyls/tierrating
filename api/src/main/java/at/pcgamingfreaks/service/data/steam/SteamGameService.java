@@ -15,6 +15,6 @@ public class SteamGameService extends SteamDataService {
 
 	@Override
 	public MediaType getContentType() {
-		return MediaType.GAMES;
+		return MediaType.GAME;
 	}
 }

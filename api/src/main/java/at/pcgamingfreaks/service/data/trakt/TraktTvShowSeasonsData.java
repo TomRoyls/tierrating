@@ -35,7 +35,7 @@ public class TraktTvShowSeasonsData extends TraktDataService {
 
 	@Override
 	public MediaType getContentType() {
-		return MediaType.TVSHOWS_SEASONS;
+		return MediaType.TV_SHOW_SEASON;
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class TraktTvShowSeasonsData extends TraktDataService {
 				.map(ratedSeason -> {
 					TraktEntry entry = new TraktEntry(
 							ratedSeason.season.ids.trakt,
-							MediaType.TVSHOWS_SEASONS,
+							MediaType.TV_SHOW_SEASON,
 							ratedSeason.season.number,
 							String.format("%s Season %d", ratedSeason.show.title, ratedSeason.season.number),
 							coverFinder.findSeason(ratedSeason.show.ids.tmdb, ratedSeason.season.number)

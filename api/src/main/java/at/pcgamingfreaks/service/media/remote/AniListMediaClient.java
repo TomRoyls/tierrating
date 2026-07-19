@@ -1,7 +1,7 @@
 package at.pcgamingfreaks.service.media.remote;
 
 import at.pcgamingfreaks.model.RemoteSyncResult;
-import at.pcgamingfreaks.model.db.User;
+import at.pcgamingfreaks.model.db.MediaSourceConnection;
 import at.pcgamingfreaks.model.db.media.AniListMediaEntry;
 import at.pcgamingfreaks.model.dto.media.anilist.AniListListEntry;
 import at.pcgamingfreaks.model.dto.media.anilist.AniListPage;
@@ -54,7 +54,7 @@ public abstract class AniListMediaClient implements RemoteMediaClient<AniListMed
 		return MediaSource.ANILIST;
 	}
 
-	private List<AniListListEntry> fetchFromApi(User user) {
+	private List<AniListListEntry> fetchFromApi(MediaSourceConnection connection) {
 		List<AniListListEntry> anilistQueryResult = new ArrayList<>();
 
 		AniListPage page;
@@ -63,10 +63,10 @@ public abstract class AniListMediaClient implements RemoteMediaClient<AniListMed
 		do {
 			page = anilistGraphQlClient
 					.mutate()
-					.header("Authorization", "Bearer " + user.getConnections().get(getSource()).getAccessToken())
+					.header("Authorization", "Bearer " + connection.getAccessToken())
 					.build()
 					.document(query)
-					.variable("userId", user.getConnections().get(getSource()).getThirdPartyUserId())
+					.variable("userId", connection.getThirdPartyUserId())
 					.variable("type", getType().name())
 					.variable("page", currentPage++)
 					.variable("perPage", 50)
@@ -79,8 +79,8 @@ public abstract class AniListMediaClient implements RemoteMediaClient<AniListMed
 	}
 
 	@Override
-	public List<RemoteSyncResult<AniListMediaEntry>> fetchRemote(User user) {
-		List<AniListListEntry> apiData = fetchFromApi(user);
+	public List<RemoteSyncResult<AniListMediaEntry>> fetchRemote(MediaSourceConnection connection) {
+		List<AniListListEntry> apiData = fetchFromApi(connection);
 
 		return apiData.stream().map(item -> {
 			AniListMediaEntry entry = new AniListMediaEntry();
