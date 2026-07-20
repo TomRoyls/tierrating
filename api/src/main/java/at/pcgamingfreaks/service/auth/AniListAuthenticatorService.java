@@ -7,7 +7,7 @@ import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.dto.AuthTokenResponseDTO;
 import at.pcgamingfreaks.model.dto.ThirdPartyOAuthRequestDTO;
 import at.pcgamingfreaks.model.exceptions.ThirdPartyAuthenticationException;
-import at.pcgamingfreaks.model.exceptions.ThirdPartyUnconfiguredException;
+import at.pcgamingfreaks.model.exceptions.MediaSourceUnconfiguredException;
 import at.pcgamingfreaks.model.repo.MediaSourceConnectionRepository;
 import at.pcgamingfreaks.model.repo.UserRepository;
 import at.pcgamingfreaks.model.util.JwtPayload;
@@ -41,7 +41,7 @@ public class AniListAuthenticatorService implements ThirdPartyOAuthAuthenticator
 	@Override
 	public void auth(String username, ThirdPartyOAuthRequestDTO request) {
 		if (!thirdPartyConfig.getAnilist().isValid())
-			throw new ThirdPartyUnconfiguredException(getMediaSource());
+			throw new MediaSourceUnconfiguredException(getMediaSource());
 
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
 		if (user.getConnections().get(getMediaSource()) != null)

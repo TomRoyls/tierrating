@@ -6,7 +6,7 @@ import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.dto.ThirdPartyOAuthRequestDTO;
 import at.pcgamingfreaks.model.exceptions.ThirdPartyAuthenticationException;
-import at.pcgamingfreaks.model.exceptions.ThirdPartyUnconfiguredException;
+import at.pcgamingfreaks.model.exceptions.MediaSourceUnconfiguredException;
 import at.pcgamingfreaks.model.repo.MediaSourceConnectionRepository;
 import at.pcgamingfreaks.model.repo.UserRepository;
 import com.uwetrottmann.trakt5.TraktV2;
@@ -35,7 +35,7 @@ public class TraktAuthenticatorService implements ThirdPartyOAuthAuthenticatorSe
 
 	@Override
 	public void auth(String username, ThirdPartyOAuthRequestDTO request) {
-		if (!thirdPartyConfig.getTrakt().isValid()) throw new ThirdPartyUnconfiguredException(getMediaSource());
+		if (!thirdPartyConfig.getTrakt().isValid()) throw new MediaSourceUnconfiguredException(getMediaSource());
 
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
 		if (user.getConnections().get(getMediaSource()) != null)

@@ -3,7 +3,7 @@ package at.pcgamingfreaks.service.info;
 import at.pcgamingfreaks.config.ThirdPartyConfig;
 import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.dto.ThirdPartyInfoResponseDTO;
-import at.pcgamingfreaks.model.exceptions.ThirdPartyUnconfiguredException;
+import at.pcgamingfreaks.model.exceptions.MediaSourceUnconfiguredException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ public class AniListInfoService implements ThirdPartyInfoService {
 	}
 
 	public ThirdPartyInfoResponseDTO info() {
-		if (!thirdPartyConfig.getAnilist().isValid()) throw new ThirdPartyUnconfiguredException(getService());
+		if (!thirdPartyConfig.getAnilist().isValid()) throw new MediaSourceUnconfiguredException(getService());
 		ThirdPartyInfoResponseDTO response = new ThirdPartyInfoResponseDTO();
 		response.setClientId(thirdPartyConfig.getAnilist().getKey());
 		return response;

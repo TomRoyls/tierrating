@@ -7,7 +7,7 @@ import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.dto.TierDTO;
 import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.enums.MediaType;
-import at.pcgamingfreaks.model.exceptions.ThirdPartyUnconfiguredException;
+import at.pcgamingfreaks.model.exceptions.MediaSourceUnconfiguredException;
 import at.pcgamingfreaks.model.repo.TierlistRepository;
 import at.pcgamingfreaks.model.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class TierlistService {
 
 	public List<TierDTO> getTierlist(String username, MediaSource source, MediaType type) {
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
-		if (!user.hasMediaSourceConnection(source)) throw new ThirdPartyUnconfiguredException(source);
+		if (!user.hasMediaSourceConnection(source)) throw new MediaSourceUnconfiguredException(source);
 
 		Optional<Tierlist> tierlist = tierlistRepository.findByUserAndServiceAndType(user, source, type);
 		List<Tier> tiers = tierlist.isPresent() ? tierlist.get().getTiers() : defaultTierlistProvider.getDefaultTierlist(source, type);
@@ -42,7 +42,7 @@ public class TierlistService {
 	@Transactional
 	public void updateTierlist(String username, MediaSource source, MediaType type, List<TierDTO> changedTierlist) {
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
-		if (!user.hasMediaSourceConnection(source)) throw new ThirdPartyUnconfiguredException(source);
+		if (!user.hasMediaSourceConnection(source)) throw new MediaSourceUnconfiguredException(source);
 
 		List<Tier> mappedTiers = changedTierlist.stream().map(TierDtoMapper::map).toList();
 

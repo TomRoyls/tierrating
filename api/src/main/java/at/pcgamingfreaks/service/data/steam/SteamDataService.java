@@ -5,7 +5,7 @@ import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.dto.ListEntryDTO;
 import at.pcgamingfreaks.model.exceptions.EntryNotFoundException;
-import at.pcgamingfreaks.model.exceptions.ThirdPartyUnconfiguredException;
+import at.pcgamingfreaks.model.exceptions.MediaSourceUnconfiguredException;
 import at.pcgamingfreaks.model.repo.SteamEntryRepository;
 import at.pcgamingfreaks.model.repo.SteamEntryScoreRepository;
 import at.pcgamingfreaks.model.repo.UserRepository;
@@ -46,7 +46,7 @@ public abstract class SteamDataService implements DataService {
 
 	@Override
 	public List<ListEntryDTO> fetch(String username) {
-		if (!thirdPartyConfig.getSteam().isValid()) throw new ThirdPartyUnconfiguredException(getService());
+		if (!thirdPartyConfig.getSteam().isValid()) throw new MediaSourceUnconfiguredException(getService());
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
 		Set<SteamEntryScore> existingScores = steamEntryScoreRepository.findAllByUserOrderByScoreDesc(user);
 
@@ -69,7 +69,7 @@ public abstract class SteamDataService implements DataService {
 
 	@Override
 	public void pull(String username) {
-		if (!thirdPartyConfig.getSteam().isValid()) throw new ThirdPartyUnconfiguredException(getService());
+		if (!thirdPartyConfig.getSteam().isValid()) throw new MediaSourceUnconfiguredException(getService());
 
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
 
@@ -111,7 +111,7 @@ public abstract class SteamDataService implements DataService {
 
 	@Override
 	public void update(long id, float score, User user) {
-		if (!thirdPartyConfig.getSteam().isValid()) throw new ThirdPartyUnconfiguredException(getService());
+		if (!thirdPartyConfig.getSteam().isValid()) throw new MediaSourceUnconfiguredException(getService());
 
 		SteamEntryScore entryScore = steamEntryScoreRepository.findByUserAndEntry_Id(user, id).orElseThrow(() -> new EntryNotFoundException(getContentType(), id));
 		entryScore.setScore(score);

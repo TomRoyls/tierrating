@@ -2,7 +2,7 @@ package at.pcgamingfreaks.service;
 
 import at.pcgamingfreaks.config.ThirdPartyConfig;
 import at.pcgamingfreaks.model.dto.TmdbInfoRequest;
-import at.pcgamingfreaks.model.exceptions.ThirdPartyUnconfiguredException;
+import at.pcgamingfreaks.model.exceptions.MediaSourceUnconfiguredException;
 import at.pcgamingfreaks.model.repo.TmdbCoverCacheRepository;
 import at.pcgamingfreaks.model.db.TmdbCoverCache;
 import lombok.RequiredArgsConstructor;
@@ -65,7 +65,7 @@ public class TmdbCoverFinder {
 	 * @return cover url
 	 */
 	private String find(String urlExtension, long id, Long season) {
-		if (!thirdPartyConfig.getTmdb().isValid()) throw new ThirdPartyUnconfiguredException(TMDB);
+		if (!thirdPartyConfig.getTmdb().isValid()) throw new MediaSourceUnconfiguredException(TMDB);
 		TmdbCoverCache tmdbCoverCache = tmdbCoverCacheRepository.findByIdAndSeason(id, season != null && season > 0 ? season : null).orElse(null);
 		if (tmdbCoverCache != null) return tmdbCoverCache.getCoverUrl();
 

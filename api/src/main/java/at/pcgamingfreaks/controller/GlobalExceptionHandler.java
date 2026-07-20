@@ -3,7 +3,7 @@ package at.pcgamingfreaks.controller;
 import at.pcgamingfreaks.model.dto.ErrorResponseDTO;
 import at.pcgamingfreaks.model.exceptions.ThirdPartyAuthenticationException;
 import at.pcgamingfreaks.model.exceptions.ThirdPartySyncException;
-import at.pcgamingfreaks.model.exceptions.ThirdPartyUnconfiguredException;
+import at.pcgamingfreaks.model.exceptions.MediaSourceUnconfiguredException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,8 +46,8 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.internalServerError().body(new ErrorResponseDTO("Third-party authentication failed"));
 	}
 
-	@ExceptionHandler(ThirdPartyUnconfiguredException.class)
-	public ResponseEntity<ErrorResponseDTO> handleThirdPartyUnconfiguredException(ThirdPartyUnconfiguredException ex) {
+	@ExceptionHandler(MediaSourceUnconfiguredException.class)
+	public ResponseEntity<ErrorResponseDTO> handleThirdPartyUnconfiguredException(MediaSourceUnconfiguredException ex) {
 		log.warn("Third-party service {} unconfigured", ex.getMessage());
 		return ResponseEntity.notFound().build();
 	}

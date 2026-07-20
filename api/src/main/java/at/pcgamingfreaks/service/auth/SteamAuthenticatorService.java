@@ -7,7 +7,7 @@ import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.dto.ThirdPartyOpenIdAuthRequestDTO;
 import at.pcgamingfreaks.model.exceptions.ThirdPartyAuthenticationException;
-import at.pcgamingfreaks.model.exceptions.ThirdPartyUnconfiguredException;
+import at.pcgamingfreaks.model.exceptions.MediaSourceUnconfiguredException;
 import at.pcgamingfreaks.model.repo.MediaSourceConnectionRepository;
 import at.pcgamingfreaks.model.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +45,7 @@ public class SteamAuthenticatorService implements ThirdPartyOpenIdAuthenticatorS
 
 	@Override
 	public void auth(String username, ThirdPartyOpenIdAuthRequestDTO request) {
-		if (!thirdPartyConfig.getSteam().isValid()) throw new ThirdPartyUnconfiguredException(getService());
+		if (!thirdPartyConfig.getSteam().isValid()) throw new MediaSourceUnconfiguredException(getService());
 
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
 		if (user.getConnections().get(getService()) != null)

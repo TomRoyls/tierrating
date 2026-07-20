@@ -8,7 +8,7 @@ import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.dto.ListEntryDTO;
 import at.pcgamingfreaks.model.exceptions.EntryNotFoundException;
 import at.pcgamingfreaks.model.exceptions.ThirdPartySyncException;
-import at.pcgamingfreaks.model.exceptions.ThirdPartyUnconfiguredException;
+import at.pcgamingfreaks.model.exceptions.MediaSourceUnconfiguredException;
 import at.pcgamingfreaks.model.repo.TraktEntryRepository;
 import at.pcgamingfreaks.model.repo.TraktEntryScoreRepository;
 import at.pcgamingfreaks.model.repo.UserRepository;
@@ -132,7 +132,7 @@ public abstract class TraktDataService implements DataService {
 	@Transactional
 	@Override
 	public void update(long id, float score, User user) {
-		if (!thirdPartyConfig.getTrakt().isValid()) throw new ThirdPartyUnconfiguredException(getService());
+		if (!thirdPartyConfig.getTrakt().isValid()) throw new MediaSourceUnconfiguredException(getService());
 
 		TraktEntryScore entryScore = entryScoreRepository.findByUserAndEntry_Id(user, id).orElseThrow(() -> new EntryNotFoundException(getContentType(), id));
 		entryScore.setScore((int) score);

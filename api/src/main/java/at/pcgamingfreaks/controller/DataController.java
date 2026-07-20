@@ -5,7 +5,7 @@ import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.dto.ListEntryDTO;
 import at.pcgamingfreaks.model.dto.UpdateScoreRequestDTO;
-import at.pcgamingfreaks.model.exceptions.ThirdPartyUnconfiguredException;
+import at.pcgamingfreaks.model.exceptions.MediaSourceUnconfiguredException;
 import at.pcgamingfreaks.model.repo.UserRepository;
 import at.pcgamingfreaks.service.data.DataFactory;
 import at.pcgamingfreaks.service.data.DataService;
@@ -60,7 +60,7 @@ public class DataController {
 					   @RequestBody UpdateScoreRequestDTO request) {
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
 		if (!user.hasMediaSourceConnection(source))
-			throw new ThirdPartyUnconfiguredException(source);
+			throw new MediaSourceUnconfiguredException(source);
 		dataFactory.getProvider(source, type).update(request.getId(), request.getScore(), user);
 	}
 

@@ -7,7 +7,7 @@ import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.dto.TierDTO;
 import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.enums.MediaType;
-import at.pcgamingfreaks.model.exceptions.ThirdPartyUnconfiguredException;
+import at.pcgamingfreaks.model.exceptions.MediaSourceUnconfiguredException;
 import at.pcgamingfreaks.model.repo.TierlistRepository;
 import at.pcgamingfreaks.model.repo.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -52,7 +52,7 @@ class TierlistServiceTest {
 	void getTierlist_userHasNoConnection() {
 		User user = new User();
 		when(userRepository.findByUsername(any())).thenReturn(Optional.of(user));
-		assertThrows(ThirdPartyUnconfiguredException.class, () -> underTest.updateTierlist("test", MediaSource.ANILIST, null, List.of()));
+		assertThrows(MediaSourceUnconfiguredException.class, () -> underTest.updateTierlist("test", MediaSource.ANILIST, null, List.of()));
 	}
 
 	@Test
@@ -90,7 +90,7 @@ class TierlistServiceTest {
 	void updateTierlist_userHasNoConnection() {
 		User user = new User();
 		when(userRepository.findByUsername(any())).thenReturn(Optional.of(user));
-		assertThrows(ThirdPartyUnconfiguredException.class, () -> underTest.getTierlist("test", MediaSource.ANILIST, null));
+		assertThrows(MediaSourceUnconfiguredException.class, () -> underTest.getTierlist("test", MediaSource.ANILIST, null));
 	}
 
 	@Test

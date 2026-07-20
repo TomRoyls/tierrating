@@ -7,7 +7,7 @@ import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.dto.ListEntryDTO;
 import at.pcgamingfreaks.model.exceptions.EntryNotFoundException;
-import at.pcgamingfreaks.model.exceptions.ThirdPartyUnconfiguredException;
+import at.pcgamingfreaks.model.exceptions.MediaSourceUnconfiguredException;
 import at.pcgamingfreaks.model.repo.AniListEntryRepository;
 import at.pcgamingfreaks.model.repo.AniListEntryScoreRepository;
 import at.pcgamingfreaks.model.repo.UserRepository;
@@ -179,7 +179,7 @@ public abstract class AnilistDataService implements DataService {
 	@Override
 	public void update(long id, float score, User user) {
 		if (!thirdPartyConfig.getAnilist().isValid())
-			throw new ThirdPartyUnconfiguredException(getService());
+			throw new MediaSourceUnconfiguredException(getService());
 
 		AniListEntryScore entryScore = aniListEntryScoreRepository.findByUserAndEntry_Id(user, id)
 				.orElseThrow(() -> new EntryNotFoundException("Anilist entry not found"));
