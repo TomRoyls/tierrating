@@ -4,6 +4,7 @@ import at.pcgamingfreaks.model.db.SyncJob;
 import at.pcgamingfreaks.model.enums.SyncStatus;
 import at.pcgamingfreaks.model.repo.SyncJobRepository;
 import at.pcgamingfreaks.service.data.DataService;
+import at.pcgamingfreaks.service.media.sync.MediaSyncProcessor;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class MediaSyncJob implements Runnable {
 	private SyncJob syncJob;
-	private final DataService service;
+	private final MediaSyncProcessor processor;
 	private final SyncJobRepository syncJobRepository;
 
 	@Override
@@ -26,7 +27,7 @@ public class MediaSyncJob implements Runnable {
 
 			syncJobRepository.updateStatus(syncJob.getId(), SyncStatus.IN_PROGRESS);
 
-			service.pull(syncJob.getUser().getUsername());
+			processor.processSync(syncJob.getUser().getId(), syncJob.getMediaSource(), syncJob.getMediaType());
 
 			syncJobRepository.completeJob(syncJob.getId(), SyncStatus.COMPLETED, LocalDateTime.now());
 			log.debug("Completed sync for {} {} {} in {}ms",

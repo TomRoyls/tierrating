@@ -8,6 +8,9 @@ import at.pcgamingfreaks.model.exceptions.MediaSourceNotConnectedException;
 import at.pcgamingfreaks.model.exceptions.MediaSyncAlreadyQueued;
 import at.pcgamingfreaks.model.repo.SyncJobRepository;
 import at.pcgamingfreaks.service.data.DataFactory;
+import at.pcgamingfreaks.service.media.remote.RemoteClientRegistry;
+import at.pcgamingfreaks.service.media.sync.MediaSyncProcessor;
+import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,10 +30,17 @@ import static at.pcgamingfreaks.model.enums.SyncStatus.*;
 public class MediaSyncManager {
 
 	private final SyncJobRepository syncJobRepository;
-	private final DataFactory dataFactory;
+	private final MediaSyncProcessor mediaSyncProcessor;
 	private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
-	// TODO: restart pending and in_progress jobs
+	@PostConstruct
+	public void restartExistingSyncs() {
+		List<SyncJob> existingJobs = syncJobRepository.findAllByStatus(List.of(PENDING, IN_PROGRESS));
+		existingJobs.forEach((job) -> {
+			executor.submit(new MediaSyncJob(job, mediaSyncProcessor, syncJobRepository));
+			log.debug("Resubmitted sync job (id: {}) for {} {} {}", job.getId(), job.getUser().getUsername(), job.getMediaSource(), job.getMediaType());
+		});
+	}
 
 	@Transactional
 	public void enqueueSync(User user, MediaSource source, MediaType type) {
@@ -41,7 +51,9 @@ public class MediaSyncManager {
 			throw new MediaSyncAlreadyQueued(user.getUsername(), source, type);
 		}
 
-		if (!user.getConnections().containsKey(source)) throw new MediaSourceNotConnectedException(user.getUsername(), source);
+		if (!user.getConnections().containsKey(source)) {
+			throw new MediaSourceNotConnectedException(user.getUsername(), source);
+		}
 
 		SyncJob job = new SyncJob();
 		job.setUser(user);
@@ -50,7 +62,7 @@ public class MediaSyncManager {
 		job.setStatus(PENDING);
 		syncJobRepository.saveAndFlush(job);
 
-		executor.submit(new MediaSyncJob(job, dataFactory.getProvider(source, type), syncJobRepository));
+		executor.submit(new MediaSyncJob(job, mediaSyncProcessor, syncJobRepository));
 		log.debug("Submitted sync job (id: {}) for {} {} {}", job.getId(), user.getUsername(), source, type);
 	}
 

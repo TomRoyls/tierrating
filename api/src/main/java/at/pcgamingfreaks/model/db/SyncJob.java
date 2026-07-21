@@ -7,6 +7,7 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "sync_jobs")
+@NoArgsConstructor
 public class SyncJob {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sync_jobs_seq")

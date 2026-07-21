@@ -22,6 +22,9 @@ public interface SyncJobRepository extends JpaRepository<SyncJob, Long> {
 
 	Optional<SyncJob> findFirstByUserAndMediaSourceAndMediaTypeAndStatusIn(User user, MediaSource source, MediaType type, List<SyncStatus> status);
 
+	@Query("select job from SyncJob job where job.status in ?1")
+	List<SyncJob> findAllByStatus(List<SyncStatus> status);
+
 	@Transactional
 	@Modifying
 	@Query("UPDATE SyncJob j SET j.status = :status WHERE j.id = :id")
