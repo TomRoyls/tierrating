@@ -1,12 +1,13 @@
 package at.pcgamingfreaks.model.repo;
 
 import at.pcgamingfreaks.model.db.MediaSourceConnection;
+import at.pcgamingfreaks.model.enums.MediaSource;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface MediaSourceConnectionRepository extends JpaRepository<MediaSourceConnection, Long> {
 
-//	List<MediaSourceConnection> findAllByAutoImportSyncIsTrue();
+	Optional<MediaSourceConnection> findByUserIdAndSource(Long usedId, MediaSource source);
 
 }

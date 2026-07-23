@@ -7,8 +7,6 @@ import at.pcgamingfreaks.model.enums.MediaType;
 import at.pcgamingfreaks.model.exceptions.MediaSourceNotConnectedException;
 import at.pcgamingfreaks.model.exceptions.MediaSyncAlreadyQueued;
 import at.pcgamingfreaks.model.repo.SyncJobRepository;
-import at.pcgamingfreaks.service.data.DataFactory;
-import at.pcgamingfreaks.service.media.remote.RemoteClientRegistry;
 import at.pcgamingfreaks.service.media.sync.MediaSyncProcessor;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
@@ -21,7 +19,8 @@ import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static at.pcgamingfreaks.model.enums.SyncStatus.*;
+import static at.pcgamingfreaks.model.enums.SyncStatus.IN_PROGRESS;
+import static at.pcgamingfreaks.model.enums.SyncStatus.PENDING;
 
 
 @Slf4j
@@ -47,7 +46,6 @@ public class MediaSyncManager {
 		Optional<SyncJob> runningJob = syncJobRepository.findActiveSyncByUserAndSourceAndTypeAndStatus(user, source, type, List.of(IN_PROGRESS, PENDING));
 		if (runningJob.isPresent()) {
 			log.debug("Tried to enqueue sync for {} {} {}, but sync already queued or in progress", user.getUsername(), source, type);
-			// TODO: could i simply return the already existing id?
 			throw new MediaSyncAlreadyQueued(user.getUsername(), source, type);
 		}
 
