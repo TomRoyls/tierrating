@@ -51,5 +51,8 @@ public abstract class TraktMediaClient implements RemoteMediaClient<TraktMediaEn
 
 	protected abstract List<RemoteSyncResult<TraktMediaEntry>> fetchWatched(String userId, String accessToken);
 
+	public boolean shouldOverwriteLocal(float localScore, float remoteScore) {
+		return Math.round(localScore) != (int) remoteScore;
+	}
 
 }

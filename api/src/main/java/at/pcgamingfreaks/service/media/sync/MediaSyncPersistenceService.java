@@ -55,7 +55,7 @@ public class MediaSyncPersistenceService {
 			E entryToSave = updateOrCreate(remoteEntry, localEntry);
 			if (entryToSave != null) entriesToSave.add(entryToSave);
 
-			UserMediaEntryState stateToSave = updateOrCreate(remoteResult, localState, source, userProxy);
+			UserMediaEntryState stateToSave = updateOrCreate(remoteResult, localState, source, userProxy, remoteMediaClient);
 			if (stateToSave != null) statesToSave.add(stateToSave);
 		}
 		mediaEntryRepository.saveAll(entriesToSave);
@@ -78,8 +78,7 @@ public class MediaSyncPersistenceService {
 		return null;
 	}
 
-	// TODO: implement score diffing decimal and int
-	private <E extends MediaEntry> UserMediaEntryState updateOrCreate(RemoteSyncResult<E> remoteResult, UserMediaEntryState localState, MediaSource source, User userProxy) {
+	private <E extends MediaEntry> UserMediaEntryState updateOrCreate(RemoteSyncResult<E> remoteResult, UserMediaEntryState localState, MediaSource source, User userProxy, RemoteMediaClient<E> remoteMediaClient) {
 		if (localState == null) {
 			UserMediaEntryState newState = new UserMediaEntryState();
 			newState.setEntryId(remoteResult.entry().getId());
@@ -90,7 +89,7 @@ public class MediaSyncPersistenceService {
 			return newState;
 		}
 
-		if (Objects.equals(localState.getScore(), remoteResult.score())
+		if (remoteMediaClient.shouldOverwriteLocal(localState.getScore(), remoteResult.score())
 				&& Objects.equals(localState.getState(), remoteResult.status())) {
 			return null;
 		}

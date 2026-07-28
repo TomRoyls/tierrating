@@ -14,4 +14,8 @@ public interface RemoteMediaClient<E extends MediaEntry> {
 	MediaType getType();
 
 	List<RemoteSyncResult<E>> fetchRemote(MediaSourceConnection connection);
+
+	default boolean shouldOverwriteLocal(float localScore, float remoteScore) {
+		return localScore != remoteScore;
+	}
 }

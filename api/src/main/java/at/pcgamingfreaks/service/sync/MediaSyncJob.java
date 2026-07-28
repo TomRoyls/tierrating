@@ -3,7 +3,6 @@ package at.pcgamingfreaks.service.sync;
 import at.pcgamingfreaks.model.db.SyncJob;
 import at.pcgamingfreaks.model.enums.SyncStatus;
 import at.pcgamingfreaks.model.repo.SyncJobRepository;
-import at.pcgamingfreaks.service.data.DataService;
 import at.pcgamingfreaks.service.media.sync.MediaSyncProcessor;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
