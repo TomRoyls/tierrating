@@ -7,8 +7,6 @@ import at.pcgamingfreaks.model.dto.ListEntryDTO;
 import at.pcgamingfreaks.model.dto.UpdateScoreRequestDTO;
 import at.pcgamingfreaks.model.exceptions.MediaSourceUnconfiguredException;
 import at.pcgamingfreaks.model.repo.UserRepository;
-import at.pcgamingfreaks.service.data.DataFactory;
-import at.pcgamingfreaks.service.data.DataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +22,6 @@ import java.util.List;
 @RequestMapping("data")
 @RequiredArgsConstructor
 public class DataController {
-	private final DataFactory dataFactory;
 	private final UserRepository userRepository;
 
 	/**
@@ -33,18 +30,18 @@ public class DataController {
 	 *
 	 * @return mapped third-party data ordered by score descending
 	 */
-	@GetMapping("fetch/{username}/{service}/{type}")
-	public ResponseEntity<List<ListEntryDTO>> fetch(@PathVariable String username,
-													@PathVariable MediaSource service,
-													@PathVariable MediaType type) {
-		DataService dataService = dataFactory.getProvider(service, type);
-		if (dataService == null) return ResponseEntity.notFound().build();
-		return ResponseEntity.ok(
-				dataService.fetch(username).stream()
-						.sorted(Comparator.comparing(ListEntryDTO::getScore).reversed())
-						.toList()
-		);
-	}
+//	@GetMapping("fetch/{username}/{service}/{type}")
+//	public ResponseEntity<List<ListEntryDTO>> fetch(@PathVariable String username,
+//													@PathVariable MediaSource service,
+//													@PathVariable MediaType type) {
+//		DataService dataService = dataFactory.getProvider(service, type);
+//		if (dataService == null) return ResponseEntity.notFound().build();
+//		return ResponseEntity.ok(
+//				dataService.fetch(username).stream()
+//						.sorted(Comparator.comparing(ListEntryDTO::getScore).reversed())
+//						.toList()
+//		);
+//	}
 
 	/**
 	 * Update score for resource.
@@ -52,17 +49,17 @@ public class DataController {
 	 *
 	 * @param request
 	 */
-	@PostMapping("update/{username}/{source}/{type}")
-	@PreAuthorize("authentication.principal.username == #username")
-	public void update(@PathVariable String username,
-					   @PathVariable MediaSource source,
-					   @PathVariable MediaType type,
-					   @RequestBody UpdateScoreRequestDTO request) {
-		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
-		if (!user.hasMediaSourceConnection(source))
-			throw new MediaSourceUnconfiguredException(source);
-		dataFactory.getProvider(source, type).update(request.getId(), request.getScore(), user);
-	}
+//	@PostMapping("update/{username}/{source}/{type}")
+//	@PreAuthorize("authentication.principal.username == #username")
+//	public void update(@PathVariable String username,
+//					   @PathVariable MediaSource source,
+//					   @PathVariable MediaType type,
+//					   @RequestBody UpdateScoreRequestDTO request) {
+//		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
+//		if (!user.hasMediaSourceConnection(source))
+//			throw new MediaSourceUnconfiguredException(source);
+//		dataFactory.getProvider(source, type).update(request.getId(), request.getScore(), user);
+//	}
 
 	/**
 	 * Push score changes for user and type to third-party service.

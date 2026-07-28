@@ -7,12 +7,10 @@ import at.pcgamingfreaks.model.db.media.SteamMediaEntry;
 import at.pcgamingfreaks.model.dto.media.steam.SteamOwnedGamesResponse;
 import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.enums.MediaState;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;
 
-@ConditionalOnBean(RestClient.class)
 public abstract class SteamMediaClient implements RemoteMediaClient<SteamMediaEntry> {
 	private static final String COVER_IMAGE_URL = "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/%s/library_600x900.jpg";
 

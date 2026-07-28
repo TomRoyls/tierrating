@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 
 @Getter
@@ -39,8 +40,7 @@ public class MediaSourceConnection {
 	@Column(nullable = false)
 	private String thirdPartyUserId;
 
-	@NotBlank
-	@Column(length = 2047, nullable = false)
+	@Column(length = 2047)
 	private String accessToken;
 
 	@Column(length = 2047)
@@ -50,7 +50,7 @@ public class MediaSourceConnection {
 
 	@OneToMany(mappedBy = "connection", orphanRemoval = true, fetch = FetchType.EAGER)
 	@MapKey(name = "type")
-	Map<MediaType, MediaTypeSettings> mediaTypeSettings;
+	Map<MediaType, MediaTypeSettings> mediaTypeSettings = new HashMap<>();
 
 	public void putMediaTypeSettings(MediaTypeSettings settings) {
 		if (settings.getType() == null) throw new IllegalStateException("Type is required for MediaTypeSettings");

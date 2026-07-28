@@ -26,6 +26,7 @@ public class MediaSyncPersistenceService {
 
 	private final AnilistMediaEntryRepository anilistMediaEntryRepository;
 	private final TraktMediaEntryRepository traktMediaEntryRepository;
+	private final SteamMediaEntryRepository steamMediaEntryRepository;
 
 	@Transactional
 	protected <E extends MediaEntry> void reconcile(Long userId, MediaSource source,
@@ -104,6 +105,7 @@ public class MediaSyncPersistenceService {
 		return switch (source) {
 			case ANILIST -> (MediaEntryRepository<E>) anilistMediaEntryRepository;
 			case TRAKT -> (MediaEntryRepository<E>) traktMediaEntryRepository;
+			case STEAM -> (MediaEntryRepository<E>) steamMediaEntryRepository;
 			default -> throw new IllegalArgumentException("Unsupported source: " + source);
 		};
 	}

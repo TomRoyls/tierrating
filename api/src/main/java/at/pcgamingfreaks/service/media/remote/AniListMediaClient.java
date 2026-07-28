@@ -9,13 +9,11 @@ import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.enums.MediaState;
 import at.pcgamingfreaks.model.enums.MediaType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.graphql.client.HttpGraphQlClient;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@ConditionalOnBean(HttpGraphQlClient.class)
 @RequiredArgsConstructor
 public abstract class AniListMediaClient implements RemoteMediaClient<AniListMediaEntry> {
 

@@ -20,8 +20,8 @@ public class SyncController {
 	private final MediaSyncService mediaSyncService;
 
 	@GetMapping("status/{source}/{type}")
-	public ResponseEntity<SyncStatusDTO> status(@PathVariable String username, @PathVariable MediaSource source, @PathVariable MediaType type) {
-		return ResponseEntity.ok(mediaSyncService.status(username, source, type));
+	public ResponseEntity<SyncStatusDTO> status(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable MediaSource source, @PathVariable MediaType type) {
+		return ResponseEntity.ok(mediaSyncService.status(userPrincipal.getUsername(), source, type));
 	}
 
 	@PostMapping("{source}/{type}")

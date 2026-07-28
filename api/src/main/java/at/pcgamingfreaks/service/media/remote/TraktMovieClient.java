@@ -12,14 +12,18 @@ import com.uwetrottmann.trakt5.entities.RatedMovie;
 import com.uwetrottmann.trakt5.entities.UserSlug;
 import com.uwetrottmann.trakt5.enums.Extended;
 import com.uwetrottmann.trakt5.enums.RatingsFilter;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 import retrofit2.Response;
 
 import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 @Service
+@ConditionalOnBean({OkHttpClient.class, TmdbCoverFinder.class})
 public class TraktMovieClient extends TraktMediaClient {
 
 	public TraktMovieClient(OkHttpClient sharedOkHttpClient, ThirdPartyConfig config, TmdbCoverFinder tmdbCoverFinder) {

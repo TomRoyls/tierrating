@@ -1,6 +1,7 @@
 package at.pcgamingfreaks.integration;
 
 import com.uwetrottmann.trakt5.TraktV2;
+import com.uwetrottmann.trakt5.TraktV2Interceptor;
 import okhttp3.OkHttpClient;
 
 public class SharedTraktV2 extends TraktV2 {
@@ -13,6 +14,8 @@ public class SharedTraktV2 extends TraktV2 {
 
 	@Override
 	protected synchronized OkHttpClient okHttpClient() {
-		return sharedOkHttpClient;
+		return sharedOkHttpClient.newBuilder()
+				.addInterceptor(new TraktV2Interceptor(this))
+				.build();
 	}
 }

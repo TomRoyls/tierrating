@@ -6,9 +6,6 @@ import at.pcgamingfreaks.model.dto.ChangePasswordRequestDTO;
 import at.pcgamingfreaks.model.dto.LoginResponseDTO;
 import at.pcgamingfreaks.model.dto.SignupRequestDTO;
 import at.pcgamingfreaks.model.dto.SignupResponseDTO;
-import at.pcgamingfreaks.model.repo.AniListEntryScoreRepository;
-import at.pcgamingfreaks.model.repo.SteamEntryScoreRepository;
-import at.pcgamingfreaks.model.repo.TraktEntryScoreRepository;
 import at.pcgamingfreaks.model.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,10 +24,6 @@ public class AuthService {
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final JwtService jwtService;
-
-	private final AniListEntryScoreRepository aniListEntryScoreRepository;
-	private final TraktEntryScoreRepository traktEntryScoreRepository;
-	private final SteamEntryScoreRepository steamEntryScoreRepository;
 
 	public LoginResponseDTO authenticate(String username, String password) {
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
@@ -86,10 +79,6 @@ public class AuthService {
 	public void deleteAccount(String username) {
 		User user = userRepository.findByUsername(username)
 				.orElseThrow(() -> new UsernameNotFoundException(username));
-
-		aniListEntryScoreRepository.deleteAllByUser(user);
-		traktEntryScoreRepository.deleteAllByUser(user);
-		steamEntryScoreRepository.deleteAllByUser(user);
 		userRepository.delete(user);
 		log.info("Deleted {} successfully", user.getUsername());
 	}

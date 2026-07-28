@@ -1,27 +1,24 @@
 package at.pcgamingfreaks.service;
 
-import at.pcgamingfreaks.config.ThirdPartyConfig;
-import at.pcgamingfreaks.model.dto.TmdbInfoRequest;
-import at.pcgamingfreaks.model.exceptions.MediaSourceUnconfiguredException;
-import at.pcgamingfreaks.model.repo.TmdbCoverCacheRepository;
 import at.pcgamingfreaks.model.db.TmdbCoverCache;
+import at.pcgamingfreaks.model.dto.TmdbInfoRequest;
+import at.pcgamingfreaks.model.repo.TmdbCoverCacheRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import static at.pcgamingfreaks.model.enums.MediaSource.TMDB;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@ConditionalOnBean(RestClient.class)
 public class TmdbCoverFinder {
-	private static final String TMDB_API_URL = "https://api.themoviedb.org/3";
 	private static final String TMDB_IMAGE_API_URL = "https://image.tmdb.org/t/p/w185";
+	private final RestClient tmdbRestClient;
 	private final TmdbCoverCacheRepository tmdbCoverCacheRepository;
-	private final ThirdPartyConfig thirdPartyConfig;
 
 	/**
 	 * Find cover image for movies from TMDB
@@ -65,15 +62,11 @@ public class TmdbCoverFinder {
 	 * @return cover url
 	 */
 	private String find(String urlExtension, long id, Long season) {
-		if (!thirdPartyConfig.getTmdb().isValid()) throw new MediaSourceUnconfiguredException(TMDB);
 		TmdbCoverCache tmdbCoverCache = tmdbCoverCacheRepository.findByIdAndSeason(id, season != null && season > 0 ? season : null).orElse(null);
 		if (tmdbCoverCache != null) return tmdbCoverCache.getCoverUrl();
 
 		try {
-			TmdbInfoRequest response = RestClient.builder()
-					.baseUrl(TMDB_API_URL)
-					.defaultHeader("Authorization", "Bearer " + thirdPartyConfig.getTmdb().getKey())
-					.build()
+			TmdbInfoRequest response = tmdbRestClient
 					.get()
 					.uri(urlExtension.formatted(id))
 					.header("accept", MediaType.APPLICATION_JSON.toString())

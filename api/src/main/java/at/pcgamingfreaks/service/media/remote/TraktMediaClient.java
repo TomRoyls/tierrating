@@ -10,13 +10,11 @@ import at.pcgamingfreaks.service.TmdbCoverFinder;
 import com.uwetrottmann.trakt5.TraktV2;
 import lombok.RequiredArgsConstructor;
 import okhttp3.OkHttpClient;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@ConditionalOnBean(OkHttpClient.class)
 @RequiredArgsConstructor
 public abstract class TraktMediaClient implements RemoteMediaClient<TraktMediaEntry> {
 

@@ -82,6 +82,7 @@ public class SteamAuthenticatorService implements ThirdPartyOpenIdAuthenticatorS
 		MediaTypeSettings settings = new MediaTypeSettings();
 		settings.setType(GAME);
 		settings.setAutoPush(false);
+
 		connection.putMediaTypeSettings(settings);
 		mediaSourceConnectionRepository.save(connection);
 	}

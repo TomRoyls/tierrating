@@ -13,6 +13,7 @@ import com.uwetrottmann.trakt5.entities.UserSlug;
 import com.uwetrottmann.trakt5.enums.Extended;
 import com.uwetrottmann.trakt5.enums.RatingsFilter;
 import okhttp3.OkHttpClient;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 import retrofit2.Response;
 
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Service
+@ConditionalOnBean({OkHttpClient.class, TmdbCoverFinder.class})
 public class TraktTvShowClient extends TraktMediaClient {
 
 	public TraktTvShowClient(OkHttpClient sharedOkHttpClient, ThirdPartyConfig config, TmdbCoverFinder tmdbCoverFinder) {

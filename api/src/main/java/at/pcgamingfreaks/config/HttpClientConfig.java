@@ -24,13 +24,13 @@ public class HttpClientConfig {
 	}
 
 	@Bean
-	@ConditionalOnProperty(prefix = "thirdparty.anilist", name = {"key", "secret", "redirect-url"})
+	@ConditionalOnProperty(prefix = "services.anilist", name = {"key", "secret", "redirect-url"})
 	public HttpGraphQlClient anilistGraphQlClient(WebClient anilistWebClient) {
 		return HttpGraphQlClient.create(anilistWebClient);
 	}
 
 	@Bean
-	@ConditionalOnProperty(prefix = "thirdparty.trakt", name = {"key", "secret", "redirect-url"})
+	@ConditionalOnProperty(prefix = "services.trakt", name = {"key", "secret", "redirect-url"})
 	public OkHttpClient traktOkHttpClient() {
 		return new OkHttpClient.Builder()
 				.connectTimeout(20, TimeUnit.SECONDS)
@@ -39,10 +39,19 @@ public class HttpClientConfig {
 	}
 
 	@Bean
-	@ConditionalOnProperty(prefix = "thirdparty.steam", name = "api-key")
-	public RestClient steamRestClient() {
+	@ConditionalOnProperty(prefix = "services.tmdb", name = "key")
+	public RestClient tmdbRestClient() {
+		return RestClient.builder()
+				.baseUrl("https://api.themoviedb.org/3")
+				.build();
+	}
+
+	@Bean
+	@ConditionalOnProperty(prefix = "services.tmdb", name = "key")
+	public RestClient steamRestClient(ThirdPartyConfig thirdPartyConfig) {
 		return RestClient.builder()
 				.baseUrl("https://api.steampowered.com")
+				.defaultHeader("Authorization", "Bearer " + thirdPartyConfig.getTmdb().getKey())
 				.build();
 	}
 }
