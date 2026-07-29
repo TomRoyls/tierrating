@@ -18,7 +18,9 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Entity(name = "tierlists")
-@Table(uniqueConstraints = {
+@Table(indexes = {
+		@Index(name = "idx_tierlist_user_id", columnList = "user_id")
+}, uniqueConstraints = {
 		@UniqueConstraint(columnNames = {"user_id", "service", "type"})
 })
 public class Tierlist {

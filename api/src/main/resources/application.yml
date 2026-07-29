@@ -1,14 +1,20 @@
 spring:
 
   datasource:
-    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/tierrating
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/tierrating?SCHEMA=tierrating
     driver-class-name: org.postgresql.Driver
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
 
+  flyway:
+    enabled: true
+    create-schemas: true
+    schemas:
+      - tierrating
+
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
 
   sql:
     init:

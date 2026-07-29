@@ -16,7 +16,9 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "sync_jobs")
+@Table(name = "sync_jobs", indexes = {
+		@Index(name = "idx_syncjob_user_id", columnList = "user_id")
+})
 @NoArgsConstructor
 public class SyncJob {
 	@Id

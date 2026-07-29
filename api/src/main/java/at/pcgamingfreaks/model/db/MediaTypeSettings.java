@@ -14,7 +14,9 @@ import java.util.List;
 @Setter
 @Entity
 @RequiredArgsConstructor
-@Table(name = "media_type_settings")
+@Table(name = "media_type_settings", indexes = {
+		@Index(name = "idx_media_type_settings_connection_id", columnList = "connection_id")
+})
 public class MediaTypeSettings {
 
 	@Id

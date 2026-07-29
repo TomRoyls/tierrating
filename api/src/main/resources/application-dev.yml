@@ -1,7 +1,7 @@
 spring:
 
   datasource:
-    url: jdbc:postgresql://localhost:5433/tierrating
+    url: jdbc:postgresql://localhost:5433/tierrating?SCHEMA=tierrating
     driver-class-name: org.postgresql.Driver
     username: tierrating
     password: ${DB_PASSWORD:testingPW}

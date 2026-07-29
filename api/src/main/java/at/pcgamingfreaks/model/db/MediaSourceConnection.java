@@ -16,7 +16,7 @@ import java.util.Map;
 @Setter
 @Entity
 @Table(name = "media_source_connections", indexes = {
-		@Index(name = "idx_mediasourceconnection_user_id", columnList = "user_id")
+		@Index(name = "idx_media_source_connection_user_id", columnList = "user_id")
 }, uniqueConstraints = {
 		@UniqueConstraint(columnNames = {"third_party_user_id", "source"})
 })
