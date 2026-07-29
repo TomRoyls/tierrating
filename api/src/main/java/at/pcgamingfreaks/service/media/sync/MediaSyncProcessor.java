@@ -29,7 +29,6 @@ public class MediaSyncProcessor {
 	private final UserRepository userRepository;
 	private final MediaSourceConnectionRepository mediaSourceConnectionRepository;
 
-
 	public void processSync(Long userId, MediaSource source, MediaType type) {
 		User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException(userId.toString()));
 		MediaSourceConnection connection = mediaSourceConnectionRepository.findByUserIdAndSource(userId, source)

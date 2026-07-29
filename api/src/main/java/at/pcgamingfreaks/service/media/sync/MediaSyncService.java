@@ -1,4 +1,4 @@
-package at.pcgamingfreaks.service.sync;
+package at.pcgamingfreaks.service.media.sync;
 
 import at.pcgamingfreaks.model.UserPrincipal;
 import at.pcgamingfreaks.model.db.SyncJob;

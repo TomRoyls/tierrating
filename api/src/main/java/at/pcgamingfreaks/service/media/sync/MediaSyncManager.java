@@ -1,4 +1,4 @@
-package at.pcgamingfreaks.service.sync;
+package at.pcgamingfreaks.service.media.sync;
 
 import at.pcgamingfreaks.model.db.SyncJob;
 import at.pcgamingfreaks.model.db.User;
@@ -7,9 +7,7 @@ import at.pcgamingfreaks.model.enums.MediaType;
 import at.pcgamingfreaks.model.exceptions.MediaSourceNotConnectedException;
 import at.pcgamingfreaks.model.exceptions.MediaSyncAlreadyQueued;
 import at.pcgamingfreaks.model.repo.SyncJobRepository;
-import at.pcgamingfreaks.service.media.sync.MediaSyncProcessor;
 import jakarta.annotation.PostConstruct;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
