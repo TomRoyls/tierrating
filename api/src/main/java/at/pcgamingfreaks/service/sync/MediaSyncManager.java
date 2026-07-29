@@ -41,7 +41,6 @@ public class MediaSyncManager {
 		});
 	}
 
-	@Transactional
 	public void enqueueSync(User user, MediaSource source, MediaType type) {
 		Optional<SyncJob> runningJob = syncJobRepository.findActiveSyncByUserAndSourceAndTypeAndStatus(user, source, type, List.of(IN_PROGRESS, PENDING));
 		if (runningJob.isPresent()) {

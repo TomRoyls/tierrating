@@ -25,11 +25,11 @@ public class MediaSyncService {
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
 		Optional<SyncJob> job = syncManager.getStatus(user, source, type);
 		// TODO: how should the response look when there is no running sync?
+		// there should always be at least one sync (initial sync) and returned a complete status sounds fine
 		return job.map(syncJob -> new SyncStatusDTO(syncJob.getMediaSource(), syncJob.getMediaType(), syncJob.getStatus(), syncJob.getStartedAt()))
 				.orElseGet(SyncStatusDTO::new);
 	}
 
-	@Transactional
 	public void enqueue(UserPrincipal userPrincipal, MediaSource source, MediaType type) {
 		User user = userRepository.findById(userPrincipal.getId()).orElseThrow(() -> new UsernameNotFoundException(userPrincipal.getUsername()));
 		syncManager.enqueueSync(user, source, type);
