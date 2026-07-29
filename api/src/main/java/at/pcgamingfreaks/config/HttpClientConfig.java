@@ -40,18 +40,18 @@ public class HttpClientConfig {
 
 	@Bean
 	@ConditionalOnProperty(prefix = "services.tmdb", name = "key")
-	public RestClient tmdbRestClient() {
+	public RestClient tmdbRestClient(ThirdPartyConfig thirdPartyConfig) {
 		return RestClient.builder()
 				.baseUrl("https://api.themoviedb.org/3")
+				.defaultHeader("Authorization", "Bearer " + thirdPartyConfig.getTmdb().getKey())
 				.build();
 	}
 
 	@Bean
-	@ConditionalOnProperty(prefix = "services.tmdb", name = "key")
-	public RestClient steamRestClient(ThirdPartyConfig thirdPartyConfig) {
+	@ConditionalOnProperty(prefix = "services.steam", name = "key")
+	public RestClient steamRestClient() {
 		return RestClient.builder()
 				.baseUrl("https://api.steampowered.com")
-				.defaultHeader("Authorization", "Bearer " + thirdPartyConfig.getTmdb().getKey())
 				.build();
 	}
 }
