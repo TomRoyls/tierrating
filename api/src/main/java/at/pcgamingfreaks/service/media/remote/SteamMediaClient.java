@@ -2,6 +2,7 @@ package at.pcgamingfreaks.service.media.remote;
 
 import at.pcgamingfreaks.config.ThirdPartyConfig;
 import at.pcgamingfreaks.model.RemoteSyncResult;
+import at.pcgamingfreaks.model.RemoteUpdateEntry;
 import at.pcgamingfreaks.model.db.MediaSourceConnection;
 import at.pcgamingfreaks.model.db.media.SteamMediaEntry;
 import at.pcgamingfreaks.model.dto.media.steam.SteamOwnedGamesResponse;
@@ -55,6 +56,11 @@ public abstract class SteamMediaClient implements RemoteMediaClient<SteamMediaEn
 					return new RemoteSyncResult<>(entry, 0f, MediaState.OWNED);
 				})
 				.toList();
+	}
+
+	@Override
+	public void pushRemote(MediaSourceConnection connection, List<RemoteUpdateEntry> updates) {
+		// Steam doesn't have ratings, therefore they can't be pushed back to Steam
 	}
 
 	@Override

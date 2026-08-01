@@ -2,15 +2,14 @@ package at.pcgamingfreaks.service.media.remote;
 
 import at.pcgamingfreaks.config.ThirdPartyConfig;
 import at.pcgamingfreaks.model.RemoteSyncResult;
+import at.pcgamingfreaks.model.RemoteUpdateEntry;
 import at.pcgamingfreaks.model.db.media.TraktMediaEntry;
 import at.pcgamingfreaks.model.enums.MediaType;
 import at.pcgamingfreaks.model.exceptions.MediaSourceFetchException;
 import at.pcgamingfreaks.service.TmdbCoverFinder;
-import com.uwetrottmann.trakt5.entities.BaseShow;
-import com.uwetrottmann.trakt5.entities.RatedShow;
-import com.uwetrottmann.trakt5.entities.Show;
-import com.uwetrottmann.trakt5.entities.UserSlug;
+import com.uwetrottmann.trakt5.entities.*;
 import com.uwetrottmann.trakt5.enums.Extended;
+import com.uwetrottmann.trakt5.enums.Rating;
 import com.uwetrottmann.trakt5.enums.RatingsFilter;
 import okhttp3.OkHttpClient;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -18,6 +17,7 @@ import org.springframework.stereotype.Service;
 import retrofit2.Response;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -81,5 +81,17 @@ public class TraktTvShowClient extends TraktMediaClient {
 		traktMediaEntry.setSeason(null);
 		traktMediaEntry.setCoverUrl(tmdbCoverFinder.findShow(show.ids.tmdb));
 		return traktMediaEntry;
+	}
+
+	@Override
+	protected SyncItems createRemoteUpdate(List<RemoteUpdateEntry> updates) {
+		List<SyncShow> tvshows = new ArrayList<>();
+		for (RemoteUpdateEntry entry : updates) {
+			tvshows.add(new SyncShow()
+					.id(ShowIds.trakt((int) entry.id()))
+					.rating(Rating.fromValue(toRemoteScore(entry.score())))
+			);
+		}
+		return new SyncItems().shows(tvshows);
 	}
 }

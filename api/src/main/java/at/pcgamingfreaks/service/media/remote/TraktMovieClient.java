@@ -2,15 +2,14 @@ package at.pcgamingfreaks.service.media.remote;
 
 import at.pcgamingfreaks.config.ThirdPartyConfig;
 import at.pcgamingfreaks.model.RemoteSyncResult;
+import at.pcgamingfreaks.model.RemoteUpdateEntry;
 import at.pcgamingfreaks.model.db.media.TraktMediaEntry;
 import at.pcgamingfreaks.model.enums.MediaType;
 import at.pcgamingfreaks.model.exceptions.MediaSourceFetchException;
 import at.pcgamingfreaks.service.TmdbCoverFinder;
-import com.uwetrottmann.trakt5.entities.BaseMovie;
-import com.uwetrottmann.trakt5.entities.Movie;
-import com.uwetrottmann.trakt5.entities.RatedMovie;
-import com.uwetrottmann.trakt5.entities.UserSlug;
+import com.uwetrottmann.trakt5.entities.*;
 import com.uwetrottmann.trakt5.enums.Extended;
+import com.uwetrottmann.trakt5.enums.Rating;
 import com.uwetrottmann.trakt5.enums.RatingsFilter;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
@@ -19,6 +18,7 @@ import org.springframework.stereotype.Service;
 import retrofit2.Response;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -80,5 +80,17 @@ public class TraktMovieClient extends TraktMediaClient {
 		traktMediaEntry.setType(getType());
 		traktMediaEntry.setCoverUrl(tmdbCoverFinder.findMovie(movie.ids.tmdb));
 		return traktMediaEntry;
+	}
+
+	@Override
+	protected SyncItems createRemoteUpdate(List<RemoteUpdateEntry> updates) {
+		List<SyncMovie> movies = new ArrayList<>();
+		for (RemoteUpdateEntry entry : updates) {
+			movies.add(new SyncMovie()
+					.id(MovieIds.trakt((int) entry.id()))
+					.rating(Rating.fromValue(toRemoteScore(entry.score())))
+			);
+		}
+		return new SyncItems().movies(movies);
 	}
 }

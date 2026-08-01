@@ -1,6 +1,7 @@
 package at.pcgamingfreaks.service.media.remote;
 
 import at.pcgamingfreaks.model.RemoteSyncResult;
+import at.pcgamingfreaks.model.RemoteUpdateEntry;
 import at.pcgamingfreaks.model.db.MediaSourceConnection;
 import at.pcgamingfreaks.model.db.media.AniListMediaEntry;
 import at.pcgamingfreaks.model.dto.media.anilist.AniListListEntry;
@@ -19,33 +20,44 @@ public abstract class AniListMediaClient implements RemoteMediaClient<AniListMed
 
 	private final HttpGraphQlClient anilistGraphQlClient;
 
-	private static final String query = """
-					query ($userId: Int, $type: MediaType, $status: MediaListStatus, $page: Int, $perPage: Int) {
-					    Page(page: $page, perPage: $perPage) {
-					        pageInfo {
-					            currentPage
-					            hasNextPage
-					            perPage
-					        }
-					        mediaList(userId: $userId, type: $type, status: $status) {
-					            score(format: POINT_10_DECIMAL)
-					            status
-					            media {
-					                id
-					                title {
-					                    romaji
-					                    english
-					                    native
-					                }
-					                coverImage {
-					                    large
-					                    extraLarge
-					                }
-					            }
-					        }
-					    }
-					}
-					""";
+	private static final String PULL_QUERY = """
+			query ($userId: Int, $type: MediaType, $status: MediaListStatus, $page: Int, $perPage: Int) {
+			    Page(page: $page, perPage: $perPage) {
+			        pageInfo {
+			            currentPage
+			            hasNextPage
+			            perPage
+			        }
+			        mediaList(userId: $userId, type: $type, status: $status) {
+			            score(format: POINT_10_DECIMAL)
+			            status
+			            media {
+			                id
+			                title {
+			                    romaji
+			                    english
+			                    native
+			                }
+			                coverImage {
+			                    large
+			                    extraLarge
+			                }
+			            }
+			        }
+			    }
+			}
+			""";
+
+	private static final String UPDATE_QUERY = """
+			mutation ($listEntryId: Int, $mediaId: Int, $score: Float, $status: MediaListStatus) {
+				SaveMediaListEntry(id: $listEntryId, mediaId: $mediaId, score: $score, status: $status) {
+					id
+					mediaId
+					score,
+					status
+				}
+			}
+			""";
 
 	@Override
 	public MediaSource getSource() {
@@ -63,7 +75,7 @@ public abstract class AniListMediaClient implements RemoteMediaClient<AniListMed
 					.mutate()
 					.header("Authorization", "Bearer " + connection.getAccessToken())
 					.build()
-					.document(query)
+					.document(PULL_QUERY)
 					.variable("userId", connection.getThirdPartyUserId())
 					.variable("type", getType().name())
 					.variable("page", currentPage++)
@@ -93,5 +105,33 @@ public abstract class AniListMediaClient implements RemoteMediaClient<AniListMed
 
 			return new RemoteSyncResult<>(entry, score, status);
 		}).toList();
+	}
+
+	@Override
+	public void pushRemote(MediaSourceConnection connection, List<RemoteUpdateEntry> updates) {
+		for (RemoteUpdateEntry entry : updates) {
+			anilistGraphQlClient
+					.mutate()
+					.header("Authorization", "Bearer " + connection.getAccessToken())
+					.build()
+					.document(UPDATE_QUERY)
+					.variable("mediaId", entry.id())
+					.variable("score", entry.score())
+					.variable("status", toRemoteStatus(entry.state()))
+					.retrieveSync("data.SaveMediaListEntry");
+		}
+	}
+
+	protected String toRemoteStatus(MediaState state) {
+		if (state == null) return null;
+
+		return switch (state) {
+			case IN_PROGRESS -> "CURRENT";
+			case PLANNING -> "PLANNING";
+			case COMPLETED -> "COMPLETED";
+			case DROPPED -> "DROPPED";
+			case PAUSED -> "PAUSED";
+			default -> null;
+		};
 	}
 }
