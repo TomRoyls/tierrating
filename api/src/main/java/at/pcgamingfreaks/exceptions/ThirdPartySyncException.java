@@ -1,4 +1,4 @@
-package at.pcgamingfreaks.model.exceptions;
+package at.pcgamingfreaks.exceptions;
 
 public class ThirdPartySyncException extends RuntimeException {
 	public ThirdPartySyncException(String message) {

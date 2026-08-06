@@ -7,7 +7,7 @@ import at.pcgamingfreaks.model.RemoteUpdateEntry;
 import at.pcgamingfreaks.model.db.MediaSourceConnection;
 import at.pcgamingfreaks.model.db.media.TraktMediaEntry;
 import at.pcgamingfreaks.model.enums.MediaSource;
-import at.pcgamingfreaks.model.exceptions.MediaSourcePushException;
+import at.pcgamingfreaks.exceptions.MediaSourcePushException;
 import at.pcgamingfreaks.service.TmdbCoverFinder;
 import com.uwetrottmann.trakt5.TraktV2;
 import com.uwetrottmann.trakt5.entities.SyncItems;

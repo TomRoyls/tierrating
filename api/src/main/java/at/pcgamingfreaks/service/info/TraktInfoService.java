@@ -3,7 +3,7 @@ package at.pcgamingfreaks.service.info;
 import at.pcgamingfreaks.config.ThirdPartyConfig;
 import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.dto.ThirdPartyInfoResponseDTO;
-import at.pcgamingfreaks.model.exceptions.MediaSourceUnconfiguredException;
+import at.pcgamingfreaks.exceptions.MediaSourceUnconfiguredException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

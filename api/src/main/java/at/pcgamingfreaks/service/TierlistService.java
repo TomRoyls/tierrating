@@ -7,7 +7,7 @@ import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.dto.TierDTO;
 import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.enums.MediaType;
-import at.pcgamingfreaks.model.exceptions.MediaSourceUnconfiguredException;
+import at.pcgamingfreaks.exceptions.MediaSourceUnconfiguredException;
 import at.pcgamingfreaks.model.repo.TierlistRepository;
 import at.pcgamingfreaks.model.repo.UserRepository;
 import lombok.RequiredArgsConstructor;

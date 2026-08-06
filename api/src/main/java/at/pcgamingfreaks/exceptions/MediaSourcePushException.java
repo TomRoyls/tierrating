@@ -1,4 +1,4 @@
-package at.pcgamingfreaks.model.exceptions;
+package at.pcgamingfreaks.exceptions;
 
 public class MediaSourcePushException extends RuntimeException {
 	public MediaSourcePushException(String message, Throwable cause) {

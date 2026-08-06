@@ -1,4 +1,4 @@
-package at.pcgamingfreaks.model.exceptions;
+package at.pcgamingfreaks.exceptions;
 
 import at.pcgamingfreaks.model.enums.MediaSource;
 

@@ -4,7 +4,7 @@ import at.pcgamingfreaks.config.ThirdPartyConfig;
 import at.pcgamingfreaks.model.db.MediaSourceConnection;
 import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.db.User;
-import at.pcgamingfreaks.model.exceptions.ThirdPartyAuthenticationException;
+import at.pcgamingfreaks.exceptions.ThirdPartyAuthenticationException;
 import at.pcgamingfreaks.model.repo.UserRepository;
 import com.uwetrottmann.trakt5.TraktV2;
 import com.uwetrottmann.trakt5.entities.AccessToken;

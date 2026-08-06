@@ -1,4 +1,4 @@
-package at.pcgamingfreaks.service.media.sync;
+package at.pcgamingfreaks.service.media;
 
 import at.pcgamingfreaks.model.UserPrincipal;
 import at.pcgamingfreaks.model.db.SyncJob;
@@ -7,6 +7,7 @@ import at.pcgamingfreaks.model.dto.sync.SyncStatusDTO;
 import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.enums.MediaType;
 import at.pcgamingfreaks.model.repo.UserRepository;
+import at.pcgamingfreaks.service.media.sync.MediaSyncManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

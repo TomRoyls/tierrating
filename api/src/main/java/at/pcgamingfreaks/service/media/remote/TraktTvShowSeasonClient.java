@@ -5,7 +5,7 @@ import at.pcgamingfreaks.model.RemoteSyncResult;
 import at.pcgamingfreaks.model.RemoteUpdateEntry;
 import at.pcgamingfreaks.model.db.media.TraktMediaEntry;
 import at.pcgamingfreaks.model.enums.MediaType;
-import at.pcgamingfreaks.model.exceptions.MediaSourceFetchException;
+import at.pcgamingfreaks.exceptions.MediaSourceFetchException;
 import at.pcgamingfreaks.service.TmdbCoverFinder;
 import com.uwetrottmann.trakt5.entities.RatedSeason;
 import com.uwetrottmann.trakt5.entities.SyncItems;

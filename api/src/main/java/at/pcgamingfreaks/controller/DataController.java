@@ -1,20 +1,19 @@
 package at.pcgamingfreaks.controller;
 
+import at.pcgamingfreaks.model.RemoteUpdateEntry;
 import at.pcgamingfreaks.model.enums.MediaType;
 import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.db.User;
-import at.pcgamingfreaks.model.dto.ListEntryDTO;
 import at.pcgamingfreaks.model.dto.UpdateScoreRequestDTO;
-import at.pcgamingfreaks.model.exceptions.MediaSourceUnconfiguredException;
+import at.pcgamingfreaks.exceptions.MediaSourceUnconfiguredException;
 import at.pcgamingfreaks.model.repo.UserRepository;
+import at.pcgamingfreaks.service.media.remote.RemoteClientRegistry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -23,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DataController {
 	private final UserRepository userRepository;
+	private final RemoteClientRegistry remoteClientRegistry;
 
 	/**
 	 * Fetch data for username, service and type.
@@ -49,17 +49,17 @@ public class DataController {
 	 *
 	 * @param request
 	 */
-//	@PostMapping("update/{username}/{source}/{type}")
-//	@PreAuthorize("authentication.principal.username == #username")
-//	public void update(@PathVariable String username,
-//					   @PathVariable MediaSource source,
-//					   @PathVariable MediaType type,
-//					   @RequestBody UpdateScoreRequestDTO request) {
-//		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
-//		if (!user.hasMediaSourceConnection(source))
-//			throw new MediaSourceUnconfiguredException(source);
-//		dataFactory.getProvider(source, type).update(request.getId(), request.getScore(), user);
-//	}
+	@PostMapping("update/{username}/{source}/{type}")
+	@PreAuthorize("authentication.principal.username == #username")
+	public void update(@PathVariable String username,
+					   @PathVariable MediaSource source,
+					   @PathVariable MediaType type,
+					   @RequestBody UpdateScoreRequestDTO request) {
+		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
+		if (!user.hasMediaSourceConnection(source))
+			throw new MediaSourceUnconfiguredException(source);
+		remoteClientRegistry.getClient(source, type).pushRemote(user.getConnections().get(source), List.of(new RemoteUpdateEntry(request.getId(), request.getScore(), request.getState())));
+	}
 
 	/**
 	 * Push score changes for user and type to third-party service.

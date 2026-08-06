@@ -6,7 +6,7 @@ import at.pcgamingfreaks.model.db.User;
 import at.pcgamingfreaks.model.db.media.MediaEntry;
 import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.enums.MediaType;
-import at.pcgamingfreaks.model.exceptions.MediaSourceNotConnectedException;
+import at.pcgamingfreaks.exceptions.MediaSourceNotConnectedException;
 import at.pcgamingfreaks.model.repo.MediaSourceConnectionRepository;
 import at.pcgamingfreaks.model.repo.UserRepository;
 import at.pcgamingfreaks.service.media.remote.RemoteClientRegistry;

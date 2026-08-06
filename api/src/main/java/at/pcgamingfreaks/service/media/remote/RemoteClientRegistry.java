@@ -2,7 +2,7 @@ package at.pcgamingfreaks.service.media.remote;
 
 import at.pcgamingfreaks.model.enums.MediaSource;
 import at.pcgamingfreaks.model.enums.MediaType;
-import at.pcgamingfreaks.model.exceptions.MediaSourceUnconfiguredException;
+import at.pcgamingfreaks.exceptions.MediaSourceUnconfiguredException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
