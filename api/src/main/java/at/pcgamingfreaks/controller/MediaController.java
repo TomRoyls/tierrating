@@ -1,20 +1,14 @@
 package at.pcgamingfreaks.controller;
 
-import at.pcgamingfreaks.model.RemoteUpdateEntry;
 import at.pcgamingfreaks.model.dto.MediaEntryDTO;
 import at.pcgamingfreaks.model.enums.MediaType;
 import at.pcgamingfreaks.model.enums.MediaSource;
-import at.pcgamingfreaks.model.db.User;
-import at.pcgamingfreaks.model.dto.UpdateScoreRequestDTO;
-import at.pcgamingfreaks.exceptions.MediaSourceUnconfiguredException;
-import at.pcgamingfreaks.model.repo.UserRepository;
+import at.pcgamingfreaks.model.dto.UpdateMediaEntryDTO;
 import at.pcgamingfreaks.service.media.MediaLibraryService;
-import at.pcgamingfreaks.service.media.remote.RemoteClientRegistry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,8 +18,7 @@ import java.util.List;
 @RequestMapping("media")
 @RequiredArgsConstructor
 public class MediaController {
-	private final UserRepository userRepository;
-	private final RemoteClientRegistry remoteClientRegistry;
+
 	private final MediaLibraryService  mediaLibraryService;
 
 	/**
@@ -42,33 +35,18 @@ public class MediaController {
 	}
 
 	/**
-	 * Update score for resource.
+	 * Update score and state for resource.
 	 * If auto sync is active, send changes directly to third-party service.
 	 *
 	 * @param request
 	 */
-	@PostMapping("update/{username}/{source}/{type}")
+	@PostMapping("{username}/{source}/{type}")
 	@PreAuthorize("authentication.principal.username == #username")
 	public void update(@PathVariable String username,
 					   @PathVariable MediaSource source,
 					   @PathVariable MediaType type,
-					   @RequestBody UpdateScoreRequestDTO request) {
-		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
-		if (!user.hasMediaSourceConnection(source))
-			throw new MediaSourceUnconfiguredException(source);
-		remoteClientRegistry.getClient(source, type).pushRemote(user.getConnections().get(source), List.of(new RemoteUpdateEntry(request.getId(), request.getScore(), request.getState())));
-	}
-
-	/**
-	 * Push score changes for user and type to third-party service.
-	 *
-	 * @param username
-	 * @param service
-	 * @param type
-	 */
-	@GetMapping("push/{username}/{service}/{type}")
-	public void push(@PathVariable String username, @PathVariable MediaSource service, @PathVariable MediaType type) {
-
+					   @RequestBody UpdateMediaEntryDTO request) {
+		mediaLibraryService.updateLocal(username, source, type, request);
 	}
 
 }

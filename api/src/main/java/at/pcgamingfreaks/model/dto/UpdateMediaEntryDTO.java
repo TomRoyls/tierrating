@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UpdateScoreRequestDTO {
+public class UpdateMediaEntryDTO {
 	private long id;
 	private float score;
 	private MediaState state;
