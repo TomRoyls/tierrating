@@ -97,7 +97,7 @@ public abstract class AniListMediaClient implements RemoteMediaClient<AniListMed
 			entry.setId(item.getMedia().getId());
 			entry.setTitle(item.getMedia().getTitle().getEnglish());
 			entry.setTitleRomaji(item.getMedia().getTitle().getRomaji());
-			entry.setType(MediaType.ANIME);
+			entry.setType(getType());
 			entry.setCoverUrl(item.getMedia().getCoverImage().getExtraLarge());
 
 			float score = item.getScore();
