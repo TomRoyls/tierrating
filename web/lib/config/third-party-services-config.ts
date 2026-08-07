@@ -28,8 +28,8 @@ export const THIRD_PARTY_SERVICE_CONFIG: Record<ThirdPartyService, ThirdPartySer
 		scoreDecimal: "1.00",
 		types: [
 			{ id: "movies", name: "Movies" },
-			{ id: "tvshows", name: "TV Shows" },
-			{ id: "tvshows-seasons", name: "TV Shows - Seasons" },
+			{ id: "tv-shows", name: "TV Shows" },
+			{ id: "tv-show-seasons", name: "TV Shows - Seasons" },
 		],
 	},
 	STEAM: {

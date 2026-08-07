@@ -71,12 +71,12 @@ export default function Profile() {
 							<TierlistLink service={"trakt"} type={"movies"} title={"Movies"} username={userData.username} />
 						)}
 						{userData.connectedServices.includes("TRAKT") && (
-							<TierlistLink service={"trakt"} type={"tvshows"} title={"TV Shows"} username={userData.username} />
+							<TierlistLink service={"trakt"} type={"tv-shows"} title={"TV Shows"} username={userData.username} />
 						)}
 						{userData.connectedServices.includes("TRAKT") && (
 							<TierlistLink
 								service={"trakt"}
-								type={"tvshows-seasons"}
+								type={"tv-show-seasons"}
 								title={"TV Shows - Seasons"}
 								username={userData.username}
 							/>

@@ -12,7 +12,6 @@ public enum MediaType {
 
 	@JsonCreator(mode = JsonCreator.Mode.DELEGATING)
 	public static MediaType from(String text) {
-		text = text.replace("-", "_");
 		for (MediaType type : MediaType.values()) {
 			if (type.name().equalsIgnoreCase(text)) return type;
 		}
