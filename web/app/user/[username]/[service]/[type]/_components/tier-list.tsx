@@ -72,7 +72,7 @@ export default function TierList({
 
 		startTransition(() => {
 			// TODO: make state variable
-			pushEntryUpdate({ id: entryToChange.id, score: targetTier.adjustedScore, state: 'IN_PROGRESS' }).catch((error) => {
+			pushEntryUpdate({ id: entryToChange.id, score: targetTier.adjustedScore, state: entryToChange.state }).catch((error) => {
 				toast.error(`Couldn't update ${entryToChange.title}. Reverted change.\n Error: ${error.message}`);
 				updateEntry(entryToChange, sourceTier!, targetTier);
 			});
