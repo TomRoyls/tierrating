@@ -55,7 +55,7 @@ export default function TierListPage({
 
 	return (
 		<div className={cn("max-w-full px-4")}>
-			<div className={"grid grid-cols-2 w-[1514px] m-auto"}>
+			<div className={"grid grid-cols-2 2xl:w-[1514px] m-auto"}>
 				<h1 className="text-3xl font-bold mb-6">{title}</h1>
 				<div className={"w-full flex justify-end items-end pb-2"}>
 					<ButtonGroup>
@@ -94,7 +94,7 @@ export default function TierListPage({
 					</ButtonGroup>
 				</div>
 			</div>
-			<div className={cn("m-auto transition-all duration-400 ease-in-out", isFullWidth ? "w-full" : "w-[1514px] ")}>
+			<div className={cn("m-auto transition-all duration-400 ease-in-out", isFullWidth ? "w-full" : "2xl:w-[1514px]")}>
 				<TierList username={username} service={service} type={type} modificationEnabled={modificationEnabled && !isPullRunning} />
 			</div>
 			{service.startsWith("trakt") && <TmdbDisclaimer />}
