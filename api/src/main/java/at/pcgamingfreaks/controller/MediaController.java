@@ -40,7 +40,7 @@ public class MediaController {
 	 *
 	 * @param request
 	 */
-	@PostMapping("{username}/{source}/{type}")
+	@PostMapping("{username}/{source}/{type}/update")
 	@PreAuthorize("authentication.principal.username == #username")
 	public void update(@PathVariable String username,
 					   @PathVariable MediaSource source,

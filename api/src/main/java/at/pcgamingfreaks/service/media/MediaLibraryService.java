@@ -74,11 +74,11 @@ public class MediaLibraryService {
 		userMediaEntryStateRepository.save(userState);
 
 		// TODO: should this be done directly here? dirtyState would be a idea, would work nicely with push function. sync could be async
-		if (user.getConnections().get(source).getMediaTypeSettings().get(type).isAutoPush()) {
-			remoteClientRegistry.getClient(source, type).pushRemote(
-					user.getConnections().get(source),
-					List.of(new RemoteUpdateEntry(request.getId(), request.getScore(), request.getState()))
-			);
-		}
+//		if (user.getConnections().get(source).getMediaTypeSettings().get(type).isAutoPush()) {
+//			remoteClientRegistry.getClient(source, type).pushRemote(
+//					user.getConnections().get(source),
+//					List.of(new RemoteUpdateEntry(request.getId(), request.getScore(), request.getState()))
+//			);
+//		}
 	}
 }

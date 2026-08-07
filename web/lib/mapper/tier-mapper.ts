@@ -9,16 +9,16 @@ export function assignTiersAndGroupEntriesByTier(tiers: Tier[], entries: Tierlis
 	let positionIndex = 0;
 
 	const entriesByTier = new Map<string, TierlistEntry[]>();
-	tiers.forEach((tier) => entriesByTier.set(tier.id, []));
+	tiers.forEach((tier) => entriesByTier.set(tier.name, []));
 
 	while (itemsIndex < entries.length && tiersIndex < tiers.length) {
 		if (entries[itemsIndex].score >= tiers[tiersIndex].score) {
 			entries[itemsIndex].tier = tiers[tiersIndex];
 			entries[itemsIndex].index = positionIndex;
 
-			if (entriesByTier.has(tiers[tiersIndex].id)) {
-				const currentEntries = entriesByTier.get(tiers[tiersIndex].id)!;
-				entriesByTier.set(tiers[tiersIndex].id, [...currentEntries, entries[itemsIndex]]);
+			if (entriesByTier.has(tiers[tiersIndex].name)) {
+				const currentEntries = entriesByTier.get(tiers[tiersIndex].name)!;
+				entriesByTier.set(tiers[tiersIndex].name, [...currentEntries, entries[itemsIndex]]);
 			}
 
 			positionIndex++;

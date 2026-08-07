@@ -8,7 +8,7 @@ import { ArrowLeftFromLine, ArrowRightFromLine, ArrowDownFromLine, ArrowUpFromLi
 import { cn } from "@/lib/utils";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { useAuth } from "@/contexts/auth-context";
-import { useThirdPartyDataPull, useTierlistEntries } from "@/lib/services/data-service";
+import { useThirdPartyDataPull, useTierlistEntries } from "@/lib/services/media-service";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";

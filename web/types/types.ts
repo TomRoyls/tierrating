@@ -4,11 +4,11 @@ export interface TierlistEntry {
 	title: string;
 	cover: string;
 	tier: Tier;
+	state: string;
 	index: number;
 }
 
 export interface Tier {
-	id: string;
 	name: string;
 	score: number;
 	adjustedScore: number;

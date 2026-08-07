@@ -9,7 +9,7 @@ import { assignTiersAndGroupEntriesByTier, groupBySingle, sortByName } from "@/l
 import TierContainerDroppable from "@/app/user/[username]/[service]/[type]/_components/tier-container-droppable";
 import { toast } from "sonner";
 import { useTiers } from "@/lib/services/tierlist-service";
-import { useScoreMutation, useTierlistEntries } from "@/lib/services/data-service";
+import { useScoreMutation, useTierlistEntries } from "@/lib/services/media-service";
 import { useAuth } from "@/contexts/auth-context";
 import { getDefaultTiers } from "@/lib/config/default-tiers";
 import { LoadingPage } from "@/components/loading-skeletons/loading-page";
@@ -39,24 +39,23 @@ export default function TierList({
 	const tiers = useMemo(() => (tiersData?.length ? tiersData : getDefaultTiers()), [tiersData]);
 	const entries = useMemo(() => entriesData ?? [], [entriesData]);
 
-	const tiersById = useMemo(() => groupBySingle(tiers, (tier) => tier.id), [tiers]);
 	const tiersByName = useMemo(() => groupBySingle(tiers, (tier) => tier.name), [tiers]);
 	const entriesById = useMemo(() => groupBySingle(entries, (entry) => entry.id), [entries]);
 
-	const initialEntriesByTierId = useMemo(() => assignTiersAndGroupEntriesByTier(tiers, entries), [tiers, entries]);
-	const [entriesByTierId, setEntriesByTierId] = useState<Map<string, TierlistEntry[]>>(new Map()); // mutated by user
-	const mappingCompleted = entriesByTierId.size > 0;
+	const initialEntriesByTierName = useMemo(() => assignTiersAndGroupEntriesByTier(tiers, entries), [tiers, entries]);
+	const [entriesByTierName, setEntriesByTierName] = useState<Map<string, TierlistEntry[]>>(new Map()); // mutated by user
+	const mappingCompleted = entriesByTierName.size > 0;
 
 	useEffect(() => {
 		queueMicrotask(() => {
-			setEntriesByTierId(initialEntriesByTierId);
+			setEntriesByTierName(initialEntriesByTierName);
 		});
-	}, [initialEntriesByTierId, entriesByTierId.size]);
+	}, [initialEntriesByTierName]);
 
 	const onDragEnd = async (event: { canceled: any; operation: { source: any; target: any } }) => {
 		if (event.canceled) return;
 
-		if (!entriesByTierId || !tiersById || !tiersByName || !entriesById) {
+		if (!entriesByTierName || !tiersByName || !entriesById) {
 			toast.error("Error occurred. Please refresh the page!");
 			return;
 		}
@@ -64,7 +63,7 @@ export default function TierList({
 		const { source, target } = event.operation;
 		const entryToChange = entriesById.get(source.id)!;
 		const sourceTier = entryToChange.tier!;
-		const targetTier = tiersById.get(target.id)!;
+		const targetTier = tiersByName.get(target.id)!;
 
 		if (!(entryToChange.tier && targetTier.name)) return;
 		if (entryToChange.tier === targetTier) return; // entry already in desired tier
@@ -72,7 +71,8 @@ export default function TierList({
 		updateEntry(entryToChange, targetTier, sourceTier);
 
 		startTransition(() => {
-			pushEntryUpdate({ id: entryToChange.id, score: targetTier.adjustedScore }).catch((error) => {
+			// TODO: make state variable
+			pushEntryUpdate({ id: entryToChange.id, score: targetTier.adjustedScore, state: 'IN_PROGRESS' }).catch((error) => {
 				toast.error(`Couldn't update ${entryToChange.title}. Reverted change.\n Error: ${error.message}`);
 				updateEntry(entryToChange, sourceTier!, targetTier);
 			});
@@ -88,15 +88,15 @@ export default function TierList({
 			score: targetTier.adjustedScore,
 		};
 
-		setEntriesByTierId((prevMap) => {
+		setEntriesByTierName((prevMap) => {
 			const newMap = new Map(prevMap);
-			if (sourceTier.id !== targetTier.id) {
+			if (sourceTier.name !== targetTier.name) {
 				// add entryToChange to new tier
-				const targetEntries = [...newMap.get(targetTier.id)!, updatedEntry].sort(sortByName);
-				newMap.set(targetTier.id, targetEntries);
+				const targetEntries = [...newMap.get(targetTier.name)!, updatedEntry].sort(sortByName);
+				newMap.set(targetTier.name, targetEntries);
 				// remove entryToChange from its current tier
-				const updatedEntries = [...newMap.get(sourceTier.id)!.filter((entry) => entry.id !== entryToChange.id)];
-				newMap.set(sourceTier.id, updatedEntries);
+				const updatedEntries = [...newMap.get(sourceTier.name)!.filter((entry) => entry.id !== entryToChange.id)];
+				newMap.set(sourceTier.name, updatedEntries);
 				// update element to avoid stale data
 				entriesById.set(updatedEntry.id, updatedEntry);
 			}
@@ -114,14 +114,14 @@ export default function TierList({
 	}
 
 	if (!mappingCompleted) {
-		return tiers.map((tier) => <TierlistEntrySkeleton key={tier.id} color={tier.color} label={tier.name} />);
+		return tiers.map((tier) => <TierlistEntrySkeleton key={tier.name} color={tier.color} label={tier.name} />);
 	}
 
 	return (
 		<DragDropProvider onDragEnd={onDragEnd}>
 			{tiers.map((tier) => (
-				<TierContainerDroppable key={tier.id} id={tier.id} label={tier.name} color={tier.color} disabled={!modificationEnabled}>
-					{entriesByTierId.get(tier.id)!.map((entry) => (
+				<TierContainerDroppable key={tier.name} id={tier.name} label={tier.name} color={tier.color} disabled={!modificationEnabled}>
+					{entriesByTierName.get(tier.name)!.map((entry) => (
 						<TierlistEntryDraggable key={entry.id} entry={entry} disabled={!modificationEnabled} />
 					))}
 				</TierContainerDroppable>
